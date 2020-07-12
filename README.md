@@ -1,4 +1,5 @@
 # HexMap
 ### Dev Plan
-#### Camare adjust
-- align center
+#### Camera adjust
+- [x] align center
+- [ ] rotate center
