@@ -18,7 +18,7 @@ public class HexMapCamera : MonoBehaviour {
 
 	float rotationAngle;
 
-	static HexMapCamera instance;
+	public static HexMapCamera instance;
 
 	public static bool Locked {
 		set {
@@ -94,18 +94,33 @@ public class HexMapCamera : MonoBehaviour {
 			grid.wrapping ? WrapPosition(position) : ClampPosition(position);
 	}
 
+	/// <summary>
+	/// 居中对齐
+	/// </summary>
+	public void CenterAlign()
+	{
+		Vector3 position = transform.localPosition;
+		position.x = (grid.cellChunkCountX - 0.5f) * HexMetrics.innerDiameter / 2;
+
+		float offsetZ = Mathf.Sqrt(swivelMinZoom / 90f) - 0.12f;
+
+		position.z = (grid.cellChunkCountZ - 1) * (1.5f * HexMetrics.outerRadius) / 2 * offsetZ;
+		transform.localPosition =
+			grid.wrapping ? WrapPosition(position) : ClampPosition(position);
+	}
+
 	Vector3 ClampPosition (Vector3 position) {
-		float xMax = (grid.cellCountX - 0.5f) * HexMetrics.innerDiameter;
+		float xMax = (grid.cellChunkCountX - 0.5f) * HexMetrics.innerDiameter;
 		position.x = Mathf.Clamp(position.x, 0f, xMax);
 
-		float zMax = (grid.cellCountZ - 1) * (1.5f * HexMetrics.outerRadius);
+		float zMax = (grid.cellChunkCountZ - 1) * (1.5f * HexMetrics.outerRadius);
 		position.z = Mathf.Clamp(position.z, 0f, zMax);
 
 		return position;
 	}
 
 	Vector3 WrapPosition (Vector3 position) {
-		float width = grid.cellCountX * HexMetrics.innerDiameter;
+		float width = grid.cellChunkCountX * HexMetrics.innerDiameter;
 		while (position.x < 0f) {
 			position.x += width;
 		}
@@ -113,7 +128,7 @@ public class HexMapCamera : MonoBehaviour {
 			position.x -= width;
 		}
 
-		float zMax = (grid.cellCountZ - 1) * (1.5f * HexMetrics.outerRadius);
+		float zMax = (grid.cellChunkCountZ - 1) * (1.5f * HexMetrics.outerRadius);
 		position.z = Mathf.Clamp(position.z, 0f, zMax);
 
 		grid.CenterMap(position.x);

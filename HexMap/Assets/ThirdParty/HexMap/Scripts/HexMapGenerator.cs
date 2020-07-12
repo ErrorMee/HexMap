@@ -182,20 +182,20 @@ public class HexMapGenerator : MonoBehaviour {
 				borderX = 0;
 			}
 			region.xMin = borderX;
-			region.xMax = grid.cellCountX - borderX;
+			region.xMax = grid.cellChunkCountX - borderX;
 			region.zMin = mapBorderZ;
-			region.zMax = grid.cellCountZ - mapBorderZ;
+			region.zMax = grid.cellChunkCountZ - mapBorderZ;
 			regions.Add(region);
 			break;
 		case 2:
 			if (Random.value < 0.5f) {
 				region.xMin = borderX;
-				region.xMax = grid.cellCountX / 2 - regionBorder;
+				region.xMax = grid.cellChunkCountX / 2 - regionBorder;
 				region.zMin = mapBorderZ;
-				region.zMax = grid.cellCountZ - mapBorderZ;
+				region.zMax = grid.cellChunkCountZ - mapBorderZ;
 				regions.Add(region);
-				region.xMin = grid.cellCountX / 2 + regionBorder;
-				region.xMax = grid.cellCountX - borderX;
+				region.xMin = grid.cellChunkCountX / 2 + regionBorder;
+				region.xMax = grid.cellChunkCountX - borderX;
 				regions.Add(region);
 			}
 			else {
@@ -203,42 +203,42 @@ public class HexMapGenerator : MonoBehaviour {
 					borderX = 0;
 				}
 				region.xMin = borderX;
-				region.xMax = grid.cellCountX - borderX;
+				region.xMax = grid.cellChunkCountX - borderX;
 				region.zMin = mapBorderZ;
-				region.zMax = grid.cellCountZ / 2 - regionBorder;
+				region.zMax = grid.cellChunkCountZ / 2 - regionBorder;
 				regions.Add(region);
-				region.zMin = grid.cellCountZ / 2 + regionBorder;
-				region.zMax = grid.cellCountZ - mapBorderZ;
+				region.zMin = grid.cellChunkCountZ / 2 + regionBorder;
+				region.zMax = grid.cellChunkCountZ - mapBorderZ;
 				regions.Add(region);
 			}
 			break;
 		case 3:
 			region.xMin = borderX;
-			region.xMax = grid.cellCountX / 3 - regionBorder;
+			region.xMax = grid.cellChunkCountX / 3 - regionBorder;
 			region.zMin = mapBorderZ;
-			region.zMax = grid.cellCountZ - mapBorderZ;
+			region.zMax = grid.cellChunkCountZ - mapBorderZ;
 			regions.Add(region);
-			region.xMin = grid.cellCountX / 3 + regionBorder;
-			region.xMax = grid.cellCountX * 2 / 3 - regionBorder;
+			region.xMin = grid.cellChunkCountX / 3 + regionBorder;
+			region.xMax = grid.cellChunkCountX * 2 / 3 - regionBorder;
 			regions.Add(region);
-			region.xMin = grid.cellCountX * 2 / 3 + regionBorder;
-			region.xMax = grid.cellCountX - borderX;
+			region.xMin = grid.cellChunkCountX * 2 / 3 + regionBorder;
+			region.xMax = grid.cellChunkCountX - borderX;
 			regions.Add(region);
 			break;
 		case 4:
 			region.xMin = borderX;
-			region.xMax = grid.cellCountX / 2 - regionBorder;
+			region.xMax = grid.cellChunkCountX / 2 - regionBorder;
 			region.zMin = mapBorderZ;
-			region.zMax = grid.cellCountZ / 2 - regionBorder;
+			region.zMax = grid.cellChunkCountZ / 2 - regionBorder;
 			regions.Add(region);
-			region.xMin = grid.cellCountX / 2 + regionBorder;
-			region.xMax = grid.cellCountX - borderX;
+			region.xMin = grid.cellChunkCountX / 2 + regionBorder;
+			region.xMax = grid.cellChunkCountX - borderX;
 			regions.Add(region);
-			region.zMin = grid.cellCountZ / 2 + regionBorder;
-			region.zMax = grid.cellCountZ - mapBorderZ;
+			region.zMin = grid.cellChunkCountZ / 2 + regionBorder;
+			region.zMax = grid.cellChunkCountZ - mapBorderZ;
 			regions.Add(region);
 			region.xMin = borderX;
-			region.xMax = grid.cellCountX / 2 - regionBorder;
+			region.xMax = grid.cellChunkCountX / 2 - regionBorder;
 			regions.Add(region);
 			break;
 		}
@@ -740,7 +740,7 @@ public class HexMapGenerator : MonoBehaviour {
 	}
 
 	float DetermineTemperature (HexCell cell) {
-		float latitude = (float)cell.coordinates.Z / grid.cellCountZ;
+		float latitude = (float)cell.coordinates.Z / grid.cellChunkCountZ;
 		if (hemisphere == HemisphereMode.Both) {
 			latitude *= 2f;
 			if (latitude > 1f) {

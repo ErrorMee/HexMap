@@ -8,7 +8,7 @@ public class NewMapMenu : MonoBehaviour {
 
 	bool generateMaps = true;
 
-	bool wrapping = true;
+	bool wrapping = false;
 
 	public void ToggleMapGeneration (bool toggle) {
 		generateMaps = toggle;
@@ -29,18 +29,20 @@ public class NewMapMenu : MonoBehaviour {
 	}
 
 	public void CreateSmallMap () {
-		CreateMap(20, 15);
+		CreateMap(3, 3);
 	}
 
 	public void CreateMediumMap () {
-		CreateMap(40, 30);
+		CreateMap(5, 4);
 	}
 
 	public void CreateLargeMap () {
-		CreateMap(80, 60);
+		CreateMap(9, 9);
 	}
 
 	void CreateMap (int x, int z) {
+		x *= HexMetrics.chunkSizeX;
+		z *= HexMetrics.chunkSizeZ;
 		if (generateMaps) {
 			mapGenerator.GenerateMap(x, z, wrapping);
 		}
