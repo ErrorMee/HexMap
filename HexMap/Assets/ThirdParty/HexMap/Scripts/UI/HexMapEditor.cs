@@ -13,12 +13,12 @@ public class HexMapEditor : MonoBehaviour {
 
 	int activeUrbanLevel, activeFarmLevel, activePlantLevel, activeSpecialIndex;
 
-	int activeTerrainTypeIndex;
+	int activeTerrainTypeIndex = -1;
 
 	int brushSize;
 
-	bool applyElevation = true;
-	bool applyWaterLevel = true;
+	bool applyElevation = false;
+	bool applyWaterLevel = false;
 
 	bool applyUrbanLevel, applyFarmLevel, applyPlantLevel, applySpecialIndex;
 
