@@ -19,9 +19,9 @@ public static class HexMetrics {
 
 	public const float waterBlendFactor = 1f - waterFactor;
 
-	public const float elevationStep = 3f;
+	public const float elevationStep = 4f;
 
-	public const int terracesPerSlope = 2;
+	public const int terracesPerSlope = 3;
 
 	public const int terraceSteps = terracesPerSlope * 2 + 1;
 
@@ -31,7 +31,7 @@ public static class HexMetrics {
 
 	public const float cellPerturbStrength = 1.5f;
 
-	public const float elevationPerturbStrength = 1.1f;
+	public const float elevationPerturbStrength = 0.2f;
 
 	public const float streamBedElevationOffset = -1.75f;
 
