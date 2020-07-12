@@ -11,3 +11,4 @@
 - [ ] cliff color
 - [ ] map texture
 - [ ] environment stuff
+- [ ] outline
