@@ -68,7 +68,7 @@ public class HexMapCamera : MonoBehaviour {
 		swivel.localRotation = Quaternion.Euler(angle, 0f, 0f);
 	}
 
-	void AdjustRotation (float delta) {
+	public void AdjustRotation (float delta) {
 		rotationAngle += delta * rotationSpeed * Time.deltaTime;
 		if (rotationAngle < 0f) {
 			rotationAngle += 360f;

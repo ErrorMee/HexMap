@@ -33,7 +33,7 @@ public class NewMapMenu : MonoBehaviour {
 	}
 
 	public void CreateMediumMap () {
-		CreateMap(8, 9);
+		CreateMap(7, 8);
 	}
 
 	public void CreateLargeMap () {
