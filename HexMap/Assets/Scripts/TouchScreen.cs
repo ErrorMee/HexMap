@@ -7,8 +7,8 @@ public class TouchScreen : MonoBehaviour
     [SerializeField] HexMapCamera hexMapCamera;
     Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
     Vector2 lastMousePos;
-    float deltaRotation = 0.4f;
-    float minReactDistance = 2;
+    float deltaRotation = 0.6f;
+    float minReactDistance = 6;
 
     private void Start()
     {
