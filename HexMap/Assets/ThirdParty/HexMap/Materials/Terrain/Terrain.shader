@@ -96,7 +96,7 @@
 			#if defined(SHOW_MAP_DATA)
 				o.Albedo = IN.mapData * grid;
 			#endif
-			o.Specular = _Specular * explored;
+			//o.Specular = _Specular * explored;
 			o.Smoothness = _Glossiness;
 			o.Occlusion = explored;
 			o.Emission = _BackgroundColor * (1 -  explored);

@@ -50,7 +50,7 @@
 
 			float explored = IN.visibility.y;
 			o.Albedo = c.rgb * IN.visibility.x;
-			o.Specular = _Specular * explored;
+			//o.Specular = _Specular * explored;
 			o.Smoothness = _Glossiness;
 			o.Occlusion = explored;
 			o.Alpha = c.a * explored;
