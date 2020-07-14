@@ -2,13 +2,14 @@
 ### Dev Plan
 #### Camera adjust
 - [x] align center
-- [ ] rotate center
+- [x] rotate center
 
 #### Input adjust
-- [ ] rotate mouse
+- [x] rotate mouse
 
 #### Map adjust
 - [ ] cliff color
+- [ ] outline
 - [ ] map texture
 - [ ] environment stuff
-- [ ] outline
+
