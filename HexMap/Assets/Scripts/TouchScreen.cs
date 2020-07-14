@@ -28,6 +28,10 @@ public class TouchScreen : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
+            if (Input.touchCount > 1)
+            {
+                return;
+            }
             Vector2 crtMousePos = new Vector2(Input.mousePosition.x - screenCenter.x, Input.mousePosition.y - screenCenter.y);
             Vector2 posVector = crtMousePos - lastMousePos;
             if (posVector.magnitude > minReactDistance)
