@@ -29,15 +29,15 @@ public class NewMapMenu : MonoBehaviour {
 	}
 
 	public void CreateSmallMap () {
-		CreateMap(4, 5);
+		CreateMap(5, 3);
 	}
 
 	public void CreateMediumMap () {
-		CreateMap(7, 8);
+		CreateMap(8, 5);
 	}
 
 	public void CreateLargeMap () {
-		CreateMap(10, 12);
+		CreateMap(12, 7);
 	}
 
 	void CreateMap (int x, int z) {

@@ -581,9 +581,9 @@ Camera:
   m_FocalLength: 50
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0
+    x: 0.17
     y: 0
-    width: 1
+    width: 0.66
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
@@ -11147,8 +11147,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414a0fc06528949a0baff4f719b04a4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellChunkCountX: 4
-  cellChunkCountZ: 5
+  cellChunkCountX: 5
+  cellChunkCountZ: 3
   generateMaps: 1
   mapGenerator: {fileID: 2056945512}
   wrapping: 0
@@ -12543,7 +12543,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1752896678}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -100}
+  m_LocalPosition: {x: 0, y: 0, z: -150}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 68505628}
@@ -15557,8 +15557,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a7781699ea884365b44347e935bc319, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stickMinZoom: -100
-  stickMaxZoom: -100
+  stickMinZoom: -150
+  stickMaxZoom: -150
   swivelMinZoom: 45
   swivelMaxZoom: 45
   moveSpeedMinZoom: 400

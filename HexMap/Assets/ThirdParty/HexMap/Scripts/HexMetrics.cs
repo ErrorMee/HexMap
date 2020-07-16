@@ -11,7 +11,7 @@ public static class HexMetrics {
 
 	public const float innerDiameter = innerRadius * 2f;
 
-	public const float solidFactor = 0.85f;
+	public const float solidFactor = 0.80f;
 
 	public const float blendFactor = 1f - solidFactor;
 
@@ -19,7 +19,7 @@ public static class HexMetrics {
 
 	public const float waterBlendFactor = 1f - waterFactor;
 
-	public const float elevationStep = 2f;
+	public const float elevationStep = 3f;
 
 	public const int terracesPerSlope = 2;
 
@@ -51,7 +51,7 @@ public static class HexMetrics {
 
 	public const float noiseScale = 0.003f;
 
-	public const int chunkSizeX = 3, chunkSizeZ = 3;
+	public const int chunkSizeX = 2, chunkSizeZ = 4;
 
 	public const int hashGridSize = 256;
 
