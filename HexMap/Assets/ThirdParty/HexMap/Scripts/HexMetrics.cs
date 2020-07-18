@@ -31,7 +31,7 @@ public static class HexMetrics {
 
 	public const float cellPerturbStrength = 1.5f;
 
-	public const float elevationPerturbStrength = 0.2f;
+	public const float elevationPerturbStrength = 0.5f;
 
 	public const float streamBedElevationOffset = -1.75f;
 
