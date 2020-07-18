@@ -6,6 +6,7 @@
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Specular ("Specular", Color) = (0.2, 0.2, 0.2)
 		_BackgroundColor ("Background Color", Color) = (0,0,0)
+		_CliffColor("Cliff Color", Color) = (1, 0.95, 0.75, 1)
 		[Toggle(SHOW_MAP_DATA)]_ShowMapData ("Show Map Data", Float) = 0
 	}
 	SubShader {
@@ -32,13 +33,14 @@
 		fixed3 _Specular;
 		fixed4 _Color;
 		half3 _BackgroundColor;
+		fixed4 _CliffColor;
 
 		struct Input {
 			float4 color : COLOR;
 			float3 worldPos;
 			float3 terrain;
 			float4 visibility;
-
+			fixed3 worldNormal : TEXCOORD0;
 			#if defined(SHOW_MAP_DATA)
 				float mapData;
 			#endif
@@ -62,6 +64,8 @@
 			data.visibility.w =
 				cell0.y * v.color.x + cell1.y * v.color.y + cell2.y * v.color.z;
 
+			data.worldNormal = UnityObjectToWorldNormal(v.normal);
+
 			#if defined(SHOW_MAP_DATA)
 				data.mapData = cell0.z * v.color.x + cell1.z * v.color.y +
 					cell2.z * v.color.z;
@@ -78,10 +82,19 @@
 		}
 
 		void surf (Input IN, inout SurfaceOutputStandardSpecular o) {
-			fixed4 c =
-				GetTerrainColor(IN, 0) +
-				GetTerrainColor(IN, 1) +
-				GetTerrainColor(IN, 2);
+			
+			fixed4 c;
+			if (IN.worldNormal.y < 0.8)
+			{
+				c = _CliffColor;
+			}
+			else
+			{
+				c =
+					GetTerrainColor(IN, 0) +
+					GetTerrainColor(IN, 1) +
+					GetTerrainColor(IN, 2);
+			}
 
 			fixed4 grid = 1;
 			#if defined(GRID_ON)

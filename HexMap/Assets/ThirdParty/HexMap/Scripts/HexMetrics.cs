@@ -19,7 +19,7 @@ public static class HexMetrics {
 
 	public const float waterBlendFactor = 1f - waterFactor;
 
-	public const float elevationStep = 3f;
+	public const float elevationStep = 2f;
 
 	public const int terracesPerSlope = 2;
 
