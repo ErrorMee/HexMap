@@ -8,7 +8,7 @@
 - [x] rotate mouse
 
 #### Map adjust
-- [x] cliff color https://www.bilibili.com/read/cv4537432/
+- [x] cliff color
 - [x] outline
 - [ ] map texture
 - [ ] Billboard botany
