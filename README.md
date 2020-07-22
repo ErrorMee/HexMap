@@ -8,8 +8,9 @@
 - [x] rotate mouse
 
 #### Map adjust
-- [ ] cliff color https://www.bilibili.com/read/cv4537432/
-- [ ] outline
+- [x] cliff color https://www.bilibili.com/read/cv4537432/
+- [x] outline
 - [ ] map texture
-- [ ] environment stuff
+- [ ] Billboard botany
+- [ ] 3d architecture
 
