@@ -68,6 +68,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _OutlineWidth: 1.708
     - _Parallax: 0.02
     - _ShowMapData: 0
     - _SrcBlend: 1
@@ -75,7 +76,8 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BackgroundColor: {r: 0.40784314, g: 0.38039216, b: 0.35686275, a: 1}
-    - _CliffColor: {r: 0.5933161, g: 0.6320754, b: 0.6056486, a: 1}
+    - _CliffColor: {r: 0.70033747, g: 0.69411767, b: 0.81960785, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _Specular: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

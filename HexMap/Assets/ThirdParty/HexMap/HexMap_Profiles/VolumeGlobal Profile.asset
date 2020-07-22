@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e69950cf90363488dc5639c1b626a0, type: 3}
   m_Name: EdgeDetectionSobel
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
-    value: 1
+    value: 0
   edgeWidth:
     overrideState: 1
     value: 0.1
   edgeColor:
     overrideState: 1
-    value: {r: 0.1559265, g: 0.1559265, b: 0.14995982, a: 1}
+    value: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

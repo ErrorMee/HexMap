@@ -8,6 +8,9 @@
 		_BackgroundColor ("Background Color", Color) = (0,0,0)
 		_CliffColor("Cliff Color", Color) = (1, 0.95, 0.75, 1)
 		[Toggle(SHOW_MAP_DATA)]_ShowMapData ("Show Map Data", Float) = 0
+
+		_OutlineColor("Outline color", Color) = (0,0,0,1)
+		_OutlineWidth("Outlines width", Range(0.0, 2.0)) = 1.1
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
@@ -84,18 +87,14 @@
 		void surf (Input IN, inout SurfaceOutputStandardSpecular o) {
 			
 			fixed4 c;
-			if (IN.worldNormal.y < 0.8)
-			{
-				c = _CliffColor;
-			}
-			else
-			{
-				c =
-					GetTerrainColor(IN, 0) +
-					GetTerrainColor(IN, 1) +
-					GetTerrainColor(IN, 2);
-			}
+			c = GetTerrainColor(IN, 0) +
+				GetTerrainColor(IN, 1) +
+				GetTerrainColor(IN, 2);
 
+			float edge = step(IN.worldNormal.y, 0.85);
+
+			c.rgb = (c.rgb + edge * _CliffColor.rgb) - edge * half3(0.9, 0.9, 0.9);
+			
 			fixed4 grid = 1;
 			#if defined(GRID_ON)
 				float2 gridUV = IN.worldPos.xz;
