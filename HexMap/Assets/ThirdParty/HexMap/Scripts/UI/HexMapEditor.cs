@@ -36,10 +36,11 @@ public class HexMapEditor : MonoBehaviour {
 		activeTerrainTypeIndex = index;
 	}
 
+	//todo by type
 	public void SetApplyElevation (bool toggle) {
 		applyElevation = toggle;
 	}
-
+	//todo by type
 	public void SetElevation (float elevation) {
 		activeElevation = (int)elevation;
 	}
@@ -208,8 +209,15 @@ public class HexMapEditor : MonoBehaviour {
 
 	void EditCell (HexCell cell) {
 		if (cell) {
-			if (activeTerrainTypeIndex >= 0) {
+			if (activeTerrainTypeIndex >= 0)
+			{
 				cell.TerrainTypeIndex = activeTerrainTypeIndex;
+				applyElevation = true;
+				activeElevation = activeTerrainTypeIndex;
+			}
+			else
+			{
+				applyElevation = false;
 			}
 			if (applyElevation) {
 				cell.Elevation = activeElevation;

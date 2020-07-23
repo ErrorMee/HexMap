@@ -9,8 +9,6 @@
 		_CliffColor("Cliff Color", Color) = (1, 0.95, 0.75, 1)
 		[Toggle(SHOW_MAP_DATA)]_ShowMapData ("Show Map Data", Float) = 0
 
-		_OutlineColor("Outline color", Color) = (0,0,0,1)
-		_OutlineWidth("Outlines width", Range(0.0, 2.0)) = 1.1
 	}
 	SubShader {
 		Tags { "RenderType"="Opaque" }
@@ -91,14 +89,12 @@
 				GetTerrainColor(IN, 1) +
 				GetTerrainColor(IN, 2);
 
-			//float edge = step(IN.worldNormal.y, 0.85);
-
-			//c.rgb = (c.rgb + edge * _CliffColor.rgb) - (edge * half3(0.9, 0.9, 0.9));
+			c.rgb = (c.rgb + step(IN.worldNormal.y, 0.85) * _CliffColor.rgb) - (step(IN.worldNormal.y, 0.85) * half3(0.9, 0.9, 0.9));
 			
-			if (IN.worldNormal.y < 0.85)
+			/*if (IN.worldNormal.y < 0.85)
 			{
 				c.rgb = (c.rgb + _CliffColor.rgb) - half3(0.9, 0.9, 0.9);
-			}
+			}*/
 			/*else
 			{
 				c.rgb = mul(c.rgb, _CliffColor.rgb) * 0.5;
@@ -117,7 +113,7 @@
 			#if defined(SHOW_MAP_DATA)
 				o.Albedo = IN.mapData * grid;
 			#endif
-			o.Specular = _Specular * explored;
+			//o.Specular = _Specular * explored;
 			o.Smoothness = _Glossiness;
 			o.Occlusion = explored;
 			o.Emission = _BackgroundColor * (1 -  explored);
