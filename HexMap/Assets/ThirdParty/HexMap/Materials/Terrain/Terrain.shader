@@ -91,10 +91,19 @@
 				GetTerrainColor(IN, 1) +
 				GetTerrainColor(IN, 2);
 
-			float edge = step(IN.worldNormal.y, 0.85);
+			//float edge = step(IN.worldNormal.y, 0.85);
 
-			c.rgb = (c.rgb + edge * _CliffColor.rgb) - edge * half3(0.9, 0.9, 0.9);
+			//c.rgb = (c.rgb + edge * _CliffColor.rgb) - (edge * half3(0.9, 0.9, 0.9));
 			
+			if (IN.worldNormal.y < 0.85)
+			{
+				c.rgb = (c.rgb + _CliffColor.rgb) - half3(0.9, 0.9, 0.9);
+			}
+			/*else
+			{
+				c.rgb = mul(c.rgb, _CliffColor.rgb) * 0.5;
+			}*/
+
 			fixed4 grid = 1;
 			#if defined(GRID_ON)
 				float2 gridUV = IN.worldPos.xz;
