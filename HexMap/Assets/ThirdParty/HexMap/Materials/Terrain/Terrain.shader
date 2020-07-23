@@ -75,7 +75,7 @@
 
 		float4 GetTerrainColor (Input IN, int index) {
 			float3 uvw = float3(
-				IN.worldPos.xz * (2 * TILING_SCALE),
+				IN.worldPos.xz * (3 * TILING_SCALE),
 				IN.terrain[index]
 			);
 			float4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, uvw);
