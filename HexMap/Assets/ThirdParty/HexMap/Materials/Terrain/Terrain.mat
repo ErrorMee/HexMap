@@ -64,7 +64,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
-    - _Glossiness: 0.3
+    - _Glossiness: 0.25
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -76,8 +76,8 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BackgroundColor: {r: 0.40784314, g: 0.38039216, b: 0.35686275, a: 1}
-    - _CliffColor: {r: 0.70033747, g: 0.69411767, b: 0.81960785, a: 1}
+    - _CliffColor: {r: 0.21568628, g: 0.21568628, b: 0.21568628, a: 0.74509805}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Specular: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _Specular: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}

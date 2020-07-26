@@ -75,7 +75,7 @@
 
 		float4 GetTerrainColor (Input IN, int index) {
 			float3 uvw = float3(
-				IN.worldPos.xz * (3 * TILING_SCALE),
+				IN.worldPos.xz * (4 * TILING_SCALE),
 				IN.terrain[index]
 			);
 			float4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, uvw);
@@ -89,16 +89,7 @@
 				GetTerrainColor(IN, 1) +
 				GetTerrainColor(IN, 2);
 
-			c.rgb = (c.rgb + step(IN.worldNormal.y, 0.85) * _CliffColor.rgb) - (step(IN.worldNormal.y, 0.85) * half3(0.9, 0.9, 0.9));
-			
-			/*if (IN.worldNormal.y < 0.85)
-			{
-				c.rgb = (c.rgb + _CliffColor.rgb) - half3(0.9, 0.9, 0.9);
-			}*/
-			/*else
-			{
-				c.rgb = mul(c.rgb, _CliffColor.rgb) * 0.5;
-			}*/
+			c.rgb = lerp(c.rgb, _CliffColor.rgb, _CliffColor.a * step(IN.worldNormal.y, 0.85));
 
 			fixed4 grid = 1;
 			#if defined(GRID_ON)
@@ -113,7 +104,7 @@
 			#if defined(SHOW_MAP_DATA)
 				o.Albedo = IN.mapData * grid;
 			#endif
-			//o.Specular = _Specular * explored;
+			o.Specular = _Specular * explored;
 			o.Smoothness = _Glossiness;
 			o.Occlusion = explored;
 			o.Emission = _BackgroundColor * (1 -  explored);

@@ -18,7 +18,7 @@ public class HexMapEditor : MonoBehaviour {
 	int brushSize;
 
 	bool applyElevation = false;
-	bool applyWaterLevel = false;
+	bool applyWaterLevel = true;
 
 	bool applyUrbanLevel, applyFarmLevel, applyPlantLevel, applySpecialIndex;
 
@@ -26,7 +26,8 @@ public class HexMapEditor : MonoBehaviour {
 		Ignore, Yes, No
 	}
 
-	OptionalToggle riverMode, roadMode, walledMode;
+	OptionalToggle riverMode = OptionalToggle.No;
+	OptionalToggle roadMode, walledMode;
 
 	bool isDrag;
 	HexDirection dragDirection;

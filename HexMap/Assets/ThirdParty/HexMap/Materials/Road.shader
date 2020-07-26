@@ -6,10 +6,8 @@
 		_Specular ("Specular", Color) = (0.2, 0.2, 0.2)
 	}
 	SubShader {
-		Tags {
-			"RenderType"="Opaque"
-			"Queue" = "Geometry+1"
-		}
+		//Tags {"RenderType"="Opaque" "Queue" = "Geometry+1"}
+		Tags { "RenderType" = "Transparent" "Queue" = "Transparent+1" }
 		LOD 200
 		Offset -1, -1
 		
@@ -50,15 +48,16 @@
 				tex2D(_MainTex, IN.worldPos.xz * (3 * TILING_SCALE));
 			fixed4 c = _Color * ((noise.y * 0.75 + 0.25) * IN.visibility.x);
 			float blend = IN.uv_MainTex.x;
-			blend *= noise.x + 0.5;
-			blend = smoothstep(0.4, 0.7, blend);
+			blend *= noise.x + 0.6;
+			blend = smoothstep(0.3, 0.7, blend);
 
 			float explored = IN.visibility.y;
 			o.Albedo = c.rgb;
 			o.Specular = _Specular * explored;
 			o.Smoothness = _Glossiness;
 			o.Occlusion = explored;
-			o.Alpha = blend * explored;
+			//o.Alpha = blend * explored;
+			o.Alpha = blend * explored * _Color.a;
 		}
 		ENDCG
 	}

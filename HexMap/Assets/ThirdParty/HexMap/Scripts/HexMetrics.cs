@@ -11,7 +11,7 @@ public static class HexMetrics {
 
 	public const float innerDiameter = innerRadius * 2f;
 
-	public const float solidFactor = 0.80f;
+	public const float solidFactor = 0.81f;
 
 	public const float blendFactor = 1f - solidFactor;
 
@@ -19,7 +19,7 @@ public static class HexMetrics {
 
 	public const float waterBlendFactor = 1f - waterFactor;
 
-	public const float elevationStep = 2f;
+	public const float elevationStep = 2.1f;
 
 	public const int terracesPerSlope = 2;
 
@@ -49,7 +49,7 @@ public static class HexMetrics {
 
 	public const float bridgeDesignLength = 7f;
 
-	public const float noiseScale = 0.003f;
+	public const float noiseScale = 0.001f;
 
 	public const int chunkSizeX = 2, chunkSizeZ = 4;
 

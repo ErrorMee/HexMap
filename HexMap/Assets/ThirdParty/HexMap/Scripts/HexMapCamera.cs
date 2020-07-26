@@ -2,6 +2,8 @@
 
 public class HexMapCamera : MonoBehaviour {
 
+	public Transform transformLight;
+
 	public float stickMinZoom, stickMaxZoom;
 
 	public float swivelMinZoom, swivelMaxZoom;
@@ -76,7 +78,10 @@ public class HexMapCamera : MonoBehaviour {
 		else if (rotationAngle >= 360f) {
 			rotationAngle -= 360f;
 		}
-		transform.localRotation = Quaternion.Euler(0f, rotationAngle, 0f);
+		//transform.localRotation = Quaternion.Euler(0f, rotationAngle, 0f);
+		transform.Rotate(Vector3.up, delta * rotationSpeed * Time.deltaTime);
+
+		transformLight.Rotate(Vector3.up, delta * rotationSpeed * Time.deltaTime, Space.World);
 	}
 
 	void AdjustPosition (float xDelta, float zDelta) {
