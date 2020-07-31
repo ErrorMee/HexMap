@@ -7,6 +7,7 @@
 		_Specular ("Specular", Color) = (0.2, 0.2, 0.2)
 		_BackgroundColor ("Background Color", Color) = (0,0,0)
 		_CliffColor("Cliff Color", Color) = (1, 0.95, 0.75, 1)
+		_RockColor("Rock Color", Color) = (1, 0.95, 0.75, 1)
 		[Toggle(SHOW_MAP_DATA)]_ShowMapData ("Show Map Data", Float) = 0
 
 	}
@@ -35,6 +36,7 @@
 		fixed4 _Color;
 		half3 _BackgroundColor;
 		fixed4 _CliffColor;
+		fixed4 _RockColor;
 
 		struct Input {
 			float4 color : COLOR;
@@ -89,8 +91,10 @@
 				GetTerrainColor(IN, 1) +
 				GetTerrainColor(IN, 2);
 
-			c.rgb = lerp(c.rgb, _CliffColor.rgb, _CliffColor.a * step(IN.worldNormal.y, 0.85));
-
+			float h = IN.worldPos.y % 4;
+			c.rgb = lerp(c.rgb, step(h, 1) * _RockColor.rgb + step(1, h) * _CliffColor.rgb, 
+				(step(h, 1) * _RockColor.a + step(1, h) * _CliffColor.a) * step(IN.worldNormal.y, 0.85));
+			
 			fixed4 grid = 1;
 			#if defined(GRID_ON)
 				float2 gridUV = IN.worldPos.xz;
