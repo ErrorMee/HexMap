@@ -8,6 +8,7 @@
 		_BackgroundColor ("Background Color", Color) = (0,0,0)
 		_CliffColor("Cliff Color", Color) = (1, 0.95, 0.75, 1)
 		_RockColor("Rock Color", Color) = (1, 0.95, 0.75, 1)
+		_ElevationStep("ElevationStep", Range(1,5)) = 2.1
 		[Toggle(SHOW_MAP_DATA)]_ShowMapData ("Show Map Data", Float) = 0
 
 	}
@@ -37,6 +38,7 @@
 		half3 _BackgroundColor;
 		fixed4 _CliffColor;
 		fixed4 _RockColor;
+		half _ElevationStep;
 
 		struct Input {
 			float4 color : COLOR;
@@ -84,12 +86,42 @@
 			return c * (IN.color[index] * IN.visibility[index]);
 		}
 
+		float4 GetRockColor(Input IN)
+		{
+			float tilingScale = 4 * TILING_SCALE;
+
+			float height = IN.worldPos.y;
+
+			float rawIndex = height / _ElevationStep + _ElevationStep / 3;
+			int index = (rawIndex);
+
+			float4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, float3(
+				IN.worldPos.xz * tilingScale,
+				index));
+			
+			/*float4 cNext = UNITY_SAMPLE_TEX2DARRAY(_MainTex, float3(
+				IN.worldPos.xz * tilingScale,
+				index + 1));
+
+			float percent = 1 - (height % _ElevationStep / _ElevationStep);
+
+			c.rgb = lerp(c.rgb, cNext.rgb, percent);*/
+
+			return c;
+		}
+
 		void surf (Input IN, inout SurfaceOutputStandardSpecular o) {
 			
 			fixed4 c;
-			c = GetTerrainColor(IN, 0) +
+			/*c = GetTerrainColor(IN, 0) +
 				GetTerrainColor(IN, 1) +
-				GetTerrainColor(IN, 2);
+				GetTerrainColor(IN, 2);*/
+
+			//c.rgb = lerp(c.rgb, _CliffColor.rgb, (_CliffColor.a) * step(IN.worldNormal.y, 0.85));
+
+			//c = lerp(fixed4(0.5, 0.6, 0.25, 1), fixed4(1, 1, 1, 1), IN.worldPos.y / 15);
+
+			c = GetRockColor(IN);
 
 			float h = IN.worldPos.y % 4;
 			c.rgb = lerp(c.rgb, step(h, 1) * _RockColor.rgb + step(1, h) * _CliffColor.rgb, 

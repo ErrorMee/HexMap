@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System;
 using System.IO;
+using System.Collections.Generic;
 
 public class SaveLoadMenu : MonoBehaviour {
 
@@ -48,6 +49,7 @@ public class SaveLoadMenu : MonoBehaviour {
 			Save(path);
 		}
 		else {
+			path = GetSelectedPath(true);
 			Load(path);
 		}
 		Close();
@@ -75,21 +77,51 @@ public class SaveLoadMenu : MonoBehaviour {
 		}
 		string[] paths =
 			Directory.GetFiles(Application.persistentDataPath, "*.map");
-		Array.Sort(paths);
-		for (int i = 0; i < paths.Length; i++) {
+
+		string[] pathsStream =
+			Directory.GetFiles(Application.streamingAssetsPath, "*.map");
+
+		List<string> allPaths = new List<string>();
+		for (int i = 0; i < paths.Length; i++)
+		{
+			allPaths.Add(paths[i]);
+		}
+		for (int i = 0; i < pathsStream.Length; i++)
+		{
+			allPaths.Add(pathsStream[i]);
+		}
+
+		allPaths.Sort();
+		for (int i = 0; i < allPaths.Count; i++) {
 			SaveLoadItem item = Instantiate(itemPrefab);
 			item.menu = this;
-			item.MapName = Path.GetFileNameWithoutExtension(paths[i]);
+			item.MapName = Path.GetFileNameWithoutExtension(allPaths[i]);
 			item.transform.SetParent(listContent, false);
 		}
 	}
 
-	string GetSelectedPath () {
+	string GetSelectedPath (bool load = false) {
 		string mapName = nameInput.text;
 		if (mapName.Length == 0) {
 			return null;
 		}
-		return Path.Combine(Application.persistentDataPath, mapName + ".map");
+
+		string mapPath = Path.Combine(Application.persistentDataPath, mapName + ".map");
+
+		if (load)
+		{
+			if (!File.Exists(mapPath))
+			{
+				mapPath = Path.Combine(Application.streamingAssetsPath, mapName + ".map");
+			}
+		}
+		else
+		{
+# if UNITY_EDITOR
+			mapPath = Path.Combine(Application.streamingAssetsPath, mapName + ".map");
+#endif
+		}
+		return mapPath;
 	}
 
 	void Save (string path) {
