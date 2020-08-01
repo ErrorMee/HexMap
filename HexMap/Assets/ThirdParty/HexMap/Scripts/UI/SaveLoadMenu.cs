@@ -78,18 +78,18 @@ public class SaveLoadMenu : MonoBehaviour {
 		string[] paths =
 			Directory.GetFiles(Application.persistentDataPath, "*.map");
 
-		string[] pathsStream =
-			Directory.GetFiles(Application.streamingAssetsPath, "*.map");
+		//string[] pathsStream =
+		//	Directory.GetFiles(Application.streamingAssetsPath, "*.map");
 
 		List<string> allPaths = new List<string>();
 		for (int i = 0; i < paths.Length; i++)
 		{
 			allPaths.Add(paths[i]);
 		}
-		for (int i = 0; i < pathsStream.Length; i++)
-		{
-			allPaths.Add(pathsStream[i]);
-		}
+		//for (int i = 0; i < pathsStream.Length; i++)
+		//{
+		//	allPaths.Add(pathsStream[i]);
+		//}
 
 		allPaths.Sort();
 		for (int i = 0; i < allPaths.Count; i++) {
@@ -108,19 +108,19 @@ public class SaveLoadMenu : MonoBehaviour {
 
 		string mapPath = Path.Combine(Application.persistentDataPath, mapName + ".map");
 
-		if (load)
-		{
-			if (!File.Exists(mapPath))
-			{
-				mapPath = Path.Combine(Application.streamingAssetsPath, mapName + ".map");
-			}
-		}
-		else
-		{
-# if UNITY_EDITOR
-			mapPath = Path.Combine(Application.streamingAssetsPath, mapName + ".map");
-#endif
-		}
+//		if (load)
+//		{
+//			if (!File.Exists(mapPath))
+//			{
+//				mapPath = Path.Combine(Application.streamingAssetsPath, mapName + ".map");
+//			}
+//		}
+//		else
+//		{
+//# if UNITY_EDITOR
+//			mapPath = Path.Combine(Application.streamingAssetsPath, mapName + ".map");
+//#endif
+//		}
 		return mapPath;
 	}
 

@@ -90,7 +90,7 @@
 		{
 			float tilingScale = 4 * TILING_SCALE;
 
-			float height = IN.worldPos.y;
+			float height = IN.worldPos.y + step(IN.worldNormal.y, 0.85) * sin(length(IN.worldPos.xz) * 2) / 6;
 
 			float rawIndex = height / _ElevationStep + _ElevationStep / 3;
 			int index = (rawIndex);
