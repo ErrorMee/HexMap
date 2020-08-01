@@ -123,7 +123,7 @@
 
 			c = GetRockColor(IN);
 
-			float h = IN.worldPos.y % 4;
+			float h = IN.worldPos.y % 2;
 			c.rgb = lerp(c.rgb, step(h, 1) * _RockColor.rgb + step(1, h) * _CliffColor.rgb, 
 				(step(h, 1) * _RockColor.a + step(1, h) * _CliffColor.a) * step(IN.worldNormal.y, 0.85));
 			
