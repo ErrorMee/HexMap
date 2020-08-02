@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 18700000, guid: f5efff6d16765894bb1f7cc0fb2322e3, type: 2}
+        m_Texture: {fileID: 18700000, guid: 5c1742c76ef3c2e4b9030b9a74437c96, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -77,9 +77,9 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BackgroundColor: {r: 0.40784314, g: 0.38039216, b: 0.35686275, a: 1}
-    - _CliffColor: {r: 0, g: 0, b: 0, a: 0.4}
+    - _CliffColor: {r: 0.078431375, g: 0.09803922, b: 0, a: 0.50980395}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RockColor: {r: 0, g: 0, b: 0, a: 0.29803923}
+    - _RockColor: {r: 0.078545615, g: 0.09803922, b: 0, a: 0.47058824}
     - _Specular: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}

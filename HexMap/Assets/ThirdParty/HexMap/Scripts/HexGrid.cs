@@ -25,6 +25,12 @@ public class HexGrid : MonoBehaviour {
 	[SerializeField]
 	private HexMapCamera hexMapCamera;
 
+	/// <summary>
+	/// 中心格子
+	/// </summary>
+	public HexCell centerCell;
+
+
 	public bool HasPath {
 		get {
 			return currentPathExists;
@@ -112,8 +118,43 @@ public class HexGrid : MonoBehaviour {
 		cellShaderData.Initialize(cellChunkCountX, cellChunkCountZ);
 		CreateChunks();
 		CreateCells();
+
+		centerCell = GetCell(HexCoordinates.FromOffsetCoordinates(
+			Mathf.FloorToInt(cellChunkCountX / 2), 
+			Mathf.FloorToInt(cellChunkCountZ / 2)));
+		SetEditEnable();
+
 		hexMapCamera.CenterAlign();
 		return true;
+	}
+
+	private void SetEditEnable()
+	{
+		int centerX = centerCell.coordinates.X;
+		int centerZ = centerCell.coordinates.Z;
+
+		for (int r = 0, z = centerZ - HexMetrics.editRadiu; z <= centerZ; z++, r++)
+		{
+			for (int x = centerX - r; x <= centerX + HexMetrics.editRadiu; x++)
+			{
+				HexCell cell = GetCell(new HexCoordinates(x, z));
+				if (cell != null)
+				{
+					cell.EditEnable = true;
+				}
+			}
+		}
+		for (int r = 0, z = centerZ + HexMetrics.editRadiu; z > centerZ; z--, r++)
+		{
+			for (int x = centerX - HexMetrics.editRadiu; x <= centerX + r; x++)
+			{
+				HexCell cell = GetCell(new HexCoordinates(x, z));
+				if (cell != null)
+				{
+					cell.EditEnable = true;
+				}
+			}
+		}
 	}
 
 	void CreateChunks () {

@@ -14,6 +14,8 @@ public class HexCell : MonoBehaviour {
 
 	public int ColumnIndex { get; set; }
 
+	public bool EditEnable { get; set; } = false;
+
 	public int Elevation {
 		get {
 			return elevation;

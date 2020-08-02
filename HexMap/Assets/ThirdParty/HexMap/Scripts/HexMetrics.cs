@@ -51,11 +51,13 @@ public static class HexMetrics {
 
 	public const float noiseScale = 0.001f;
 
-	public const int chunkSizeX = 2, chunkSizeZ = 4;
+	public const int chunkSizeX = 3, chunkSizeZ = 3;
 
 	public const int hashGridSize = 256;
 
 	public const float hashGridScale = 0.25f;
+
+	public const int editRadiu = 3;
 
 	static HexHash[] hashGrid;
 

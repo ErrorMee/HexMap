@@ -6,7 +6,7 @@ public class NewMapMenu : MonoBehaviour {
 
 	public HexMapGenerator mapGenerator;
 
-	bool generateMaps = true;
+	bool generateMaps = false;
 
 	bool wrapping = false;
 
@@ -29,15 +29,15 @@ public class NewMapMenu : MonoBehaviour {
 	}
 
 	public void CreateSmallMap () {
-		CreateMap(5, 3);
+		CreateMap(3, 3);
 	}
 
 	public void CreateMediumMap () {
-		CreateMap(6, 4);
+		CreateMap(5, 7);
 	}
 
 	public void CreateLargeMap () {
-		CreateMap(8, 5);
+		CreateMap(7, 9);
 	}
 
 	void CreateMap (int x, int z) {
