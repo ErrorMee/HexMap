@@ -7,6 +7,8 @@ public class HexGridChunk : MonoBehaviour {
 
 	public HexFeatureManager features;
 
+	public HighlightQuadManager highlights;
+
 	HexCell[] cells;
 
 	Canvas gridCanvas;
@@ -49,6 +51,7 @@ public class HexGridChunk : MonoBehaviour {
 		waterShore.Clear();
 		estuaries.Clear();
 		features.Clear();
+		
 		for (int i = 0; i < cells.Length; i++) {
 			Triangulate(cells[i]);
 		}

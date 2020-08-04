@@ -140,7 +140,7 @@ public class HexGrid : MonoBehaviour {
 				HexCell cell = GetCell(new HexCoordinates(x, z));
 				if (cell != null)
 				{
-					cell.EditEnable = true;
+					cell.BuildEnable = true;
 				}
 			}
 		}
@@ -151,7 +151,7 @@ public class HexGrid : MonoBehaviour {
 				HexCell cell = GetCell(new HexCoordinates(x, z));
 				if (cell != null)
 				{
-					cell.EditEnable = true;
+					cell.BuildEnable = true;
 				}
 			}
 		}
@@ -169,6 +169,7 @@ public class HexGrid : MonoBehaviour {
 			for (int x = 0; x < chunkCountX; x++) {
 				HexGridChunk chunk = chunks[i++] = Instantiate(chunkPrefab);
 				chunk.transform.SetParent(columns[x], false);
+				chunk.highlights.Clear();
 			}
 		}
 	}

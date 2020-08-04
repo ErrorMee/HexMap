@@ -209,7 +209,7 @@ public class HexMapEditor : MonoBehaviour {
 	}
 
 	void EditCell (HexCell cell) {
-		if (cell && cell.EditEnable) {
+		if (cell && cell.BuildEnable) {
 			if (activeTerrainTypeIndex >= 0)
 			{
 				cell.TerrainTypeIndex = activeTerrainTypeIndex;

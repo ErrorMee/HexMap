@@ -14,7 +14,40 @@ public class HexCell : MonoBehaviour {
 
 	public int ColumnIndex { get; set; }
 
-	public bool EditEnable { get; set; } = false;
+	private HighlightQuadType highlightQuad = HighlightQuadType.None;
+
+	public HighlightQuadType HighlightQuad
+	{
+		get
+		{
+			return highlightQuad;
+		}
+		set
+		{
+			highlightQuad = value;
+
+			chunk.highlights.SetHighlightQuad(this, this.Position);
+		}
+	}
+
+	private bool buildEnable = false;
+	public bool BuildEnable 
+	{
+		get {
+			return buildEnable;
+		}
+		set{
+			buildEnable = value;
+			if (buildEnable)
+			{
+				HighlightQuad = HighlightQuadType.Build;
+			}
+			else
+			{
+				HighlightQuad = HighlightQuadType.None;
+			}
+		}
+	}
 
 	public int Elevation {
 		get {
