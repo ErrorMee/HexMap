@@ -65,14 +65,14 @@ MonoBehaviour:
     - {fileID: 4000013997932258, guid: 5c6c17863f6cc4021bdced61fe712fb1, type: 3}
   plantCollections:
   - prefabs:
-    - {fileID: 4000011812086372, guid: e64480d9f2c5c42439cac262a22f542f, type: 3}
-    - {fileID: 4000011812086372, guid: 3b3f395112d654a6a85e97ebefaf4d91, type: 3}
+    - {fileID: 7107613897399598304, guid: c3a3ceb248956d944a1774dc5a69a4c1, type: 3}
+    - {fileID: 4111763390798645634, guid: 9dd1818c79c58fb4fb25808f9f4bf669, type: 3}
   - prefabs:
-    - {fileID: 4000013436407900, guid: db065bb94d2684adf9f80eb695f76fed, type: 3}
-    - {fileID: 4000013436407900, guid: 0e9a5fa1d0db54bd09163d3d6509d210, type: 3}
+    - {fileID: 1313206041570373022, guid: 97dbb34322022d34ca8cf9f97d8e0a9e, type: 3}
+    - {fileID: 1669569676020051491, guid: 6b6131a0cde873641b2bda50a3737d1d, type: 3}
   - prefabs:
-    - {fileID: 4000013997932258, guid: eeb3748a5f0ed40f3ad86263ab781421, type: 3}
-    - {fileID: 4000013997932258, guid: 2fe8d139a980145f997e9f4c3e1c2606, type: 3}
+    - {fileID: 3447333331441600017, guid: 548693d167d93964d8a62010795b88f8, type: 3}
+    - {fileID: 8960057011111989112, guid: 71feef51e920ce74bb2ce4baf8faa8ac, type: 3}
   walls: {fileID: 114000013599494320}
   wallTower: {fileID: 4000011665626236, guid: 1589993158ba34786b54f448bdeb6085, type: 3}
   bridge: {fileID: 4000012598710820, guid: 234387bb7219042168570e127fbd5b58, type: 3}

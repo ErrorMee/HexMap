@@ -8,6 +8,8 @@ public class HexMapEditor : MonoBehaviour {
 
 	public Material terrainMaterial;
 
+	public Texture2DArray[] texture2DArrays;
+
 	public Transform leftPanel, rightPanel;
 
 	int activeElevation;
@@ -112,6 +114,11 @@ public class HexMapEditor : MonoBehaviour {
 	{
 		leftPanel.gameObject.SetActive(toggle);
 		rightPanel.gameObject.SetActive(toggle);
+	}
+
+	public void SetTheme(int mode)
+	{
+		terrainMaterial.SetTexture("_MainTex", texture2DArrays[mode]);
 	}
 
 	public void ShowGrid (bool visible) {

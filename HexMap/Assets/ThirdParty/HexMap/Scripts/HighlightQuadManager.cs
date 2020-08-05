@@ -41,7 +41,7 @@ public class HighlightQuadManager : MonoBehaviour
         {
             return;
         }
-        position.y += HexMetrics.elevationPerturbStrength * 0.5f;
+        position.y += HexMetrics.elevationPerturbStrength * 0.2f;
         //HexHash hash = HexMetrics.SampleHashGrid(position);
         Transform instance = Instantiate(prefabHighlightQuad);
         instance.localPosition = position;
