@@ -8,6 +8,8 @@ public class HexMapEditor : MonoBehaviour {
 
 	public Material terrainMaterial;
 
+	public Transform leftPanel, rightPanel;
+
 	int activeElevation;
 	int activeWaterLevel;
 
@@ -104,6 +106,12 @@ public class HexMapEditor : MonoBehaviour {
 
 	public void SetEditMode (bool toggle) {
 		enabled = toggle;
+	}
+
+	public void ShowUI(bool toggle)
+	{
+		leftPanel.gameObject.SetActive(toggle);
+		rightPanel.gameObject.SetActive(toggle);
 	}
 
 	public void ShowGrid (bool visible) {
