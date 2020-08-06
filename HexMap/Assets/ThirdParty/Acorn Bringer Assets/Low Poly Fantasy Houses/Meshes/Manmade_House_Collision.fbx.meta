@@ -1,0 +1,139 @@
+fileFormatVersion: 2
+guid: 1ce77fb879fadf04ca6e44ad1780ba47
+timeCreated: 1496585419
+licenseType: Store
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Manmade_House_10_Collide
+    100002: Manmade_House_11_Collide
+    100004: Manmade_House_12_Collide
+    100006: Manmade_House_1_Collide
+    100008: Manmade_House_2_Collide
+    100010: Manmade_House_3_Collide
+    100012: Manmade_House_4_Collide
+    100014: Manmade_House_5_Collide
+    100016: Manmade_House_6_Collide
+    100018: Manmade_House_7_Collide
+    100020: Manmade_House_8_Collide
+    100022: Manmade_House_9_Collide
+    100024: //RootNode
+    400000: Manmade_House_10_Collide
+    400002: Manmade_House_11_Collide
+    400004: Manmade_House_12_Collide
+    400006: Manmade_House_1_Collide
+    400008: Manmade_House_2_Collide
+    400010: Manmade_House_3_Collide
+    400012: Manmade_House_4_Collide
+    400014: Manmade_House_5_Collide
+    400016: Manmade_House_6_Collide
+    400018: Manmade_House_7_Collide
+    400020: Manmade_House_8_Collide
+    400022: Manmade_House_9_Collide
+    400024: //RootNode
+    2300000: Manmade_House_10_Collide
+    2300002: Manmade_House_11_Collide
+    2300004: Manmade_House_12_Collide
+    2300006: Manmade_House_1_Collide
+    2300008: Manmade_House_2_Collide
+    2300010: Manmade_House_3_Collide
+    2300012: Manmade_House_4_Collide
+    2300014: Manmade_House_5_Collide
+    2300016: Manmade_House_6_Collide
+    2300018: Manmade_House_7_Collide
+    2300020: Manmade_House_8_Collide
+    2300022: Manmade_House_9_Collide
+    3300000: Manmade_House_10_Collide
+    3300002: Manmade_House_11_Collide
+    3300004: Manmade_House_12_Collide
+    3300006: Manmade_House_1_Collide
+    3300008: Manmade_House_2_Collide
+    3300010: Manmade_House_3_Collide
+    3300012: Manmade_House_4_Collide
+    3300014: Manmade_House_5_Collide
+    3300016: Manmade_House_6_Collide
+    3300018: Manmade_House_7_Collide
+    3300020: Manmade_House_8_Collide
+    3300022: Manmade_House_9_Collide
+    4300000: Manmade_House_1_Collide
+    4300002: Manmade_House_2_Collide
+    4300004: Manmade_House_3_Collide
+    4300006: Manmade_House_4_Collide
+    4300008: Manmade_House_5_Collide
+    4300010: Manmade_House_6_Collide
+    4300012: Manmade_House_7_Collide
+    4300014: Manmade_House_8_Collide
+    4300016: Manmade_House_9_Collide
+    4300018: Manmade_House_10_Collide
+    4300020: Manmade_House_11_Collide
+    4300022: Manmade_House_12_Collide
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
