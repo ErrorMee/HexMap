@@ -18,6 +18,7 @@ public class HexMapEditor : MonoBehaviour {
 	int activeUrbanLevel, activeFarmLevel, activePlantLevel, activeSpecialIndex;
 
 	int activeTerrainTypeIndex = -1;
+	int activeHeroTypeIndex = -1;
 
 	int brushSize;
 
@@ -121,6 +122,11 @@ public class HexMapEditor : MonoBehaviour {
 		terrainMaterial.SetTexture("_MainTex", texture2DArrays[mode]);
 	}
 
+	public void SetHero(int mode)
+	{
+		activeHeroTypeIndex = mode;
+	}
+
 	public void ShowGrid (bool visible) {
 		if (visible) {
 			terrainMaterial.EnableKeyword("GRID_ON");
@@ -142,15 +148,15 @@ public class HexMapEditor : MonoBehaviour {
 				HandleInput();
 				return;
 			}
-			if (Input.GetKeyDown(KeyCode.U)) {
-				if (Input.GetKey(KeyCode.LeftShift)) {
-					DestroyUnit();
-				}
-				else {
-					CreateUnit();
-				}
-				return;
-			}
+			//if (Input.GetKeyDown(KeyCode.U)) {
+			//	if (Input.GetKey(KeyCode.LeftShift)) {
+			//		DestroyUnit();
+			//	}
+			//	else {
+			//		CreateUnit();
+			//	}
+			//	return;
+			//}
 		}
 		previousCell = null;
 	}
@@ -160,21 +166,21 @@ public class HexMapEditor : MonoBehaviour {
 			hexGrid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
 	}
 
-	void CreateUnit () {
-		HexCell cell = GetCellUnderCursor();
-		if (cell && !cell.Unit) {
-			hexGrid.AddUnit(
-				Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
-			);
-		}
-	}
+	//void CreateUnit () {
+	//	HexCell cell = GetCellUnderCursor();
+	//	if (cell && !cell.Unit) {
+	//		hexGrid.AddUnit(
+	//			Instantiate(HexUnit.unitPrefab), cell, Random.Range(0f, 360f)
+	//		);
+	//	}
+	//}
 
-	void DestroyUnit () {
-		HexCell cell = GetCellUnderCursor();
-		if (cell && cell.Unit) {
-			hexGrid.RemoveUnit(cell.Unit);
-		}
-	}
+	//void DestroyUnit () {
+	//	HexCell cell = GetCellUnderCursor();
+	//	if (cell && cell.Unit) {
+	//		hexGrid.RemoveUnit(cell.Unit);
+	//	}
+	//}
 
 	void HandleInput () {
 		HexCell currentCell = GetCellUnderCursor();
@@ -270,6 +276,26 @@ public class HexMapEditor : MonoBehaviour {
 					}
 					if (roadMode == OptionalToggle.Yes) {
 						otherCell.AddRoad(dragDirection);
+					}
+				}
+			}
+
+			if (activeHeroTypeIndex >= 0)
+			{
+				if (activeHeroTypeIndex == 0)
+				{
+					if (cell.Unit)
+					{
+						hexGrid.RemoveUnit(cell.Unit);
+					}
+				}
+				else
+				{
+					if (!cell.Unit)
+					{
+						hexGrid.AddUnit(
+							Instantiate(HexUnit.unitPrefabs[activeHeroTypeIndex - 1]), cell, Random.Range(0f, 360f)
+						);
 					}
 				}
 			}

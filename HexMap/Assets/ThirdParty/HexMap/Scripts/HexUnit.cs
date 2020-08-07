@@ -8,7 +8,7 @@ public class HexUnit : MonoBehaviour {
 	const float rotationSpeed = 180f;
 	const float travelSpeed = 4f;
 
-	public static HexUnit unitPrefab;
+	public static HexUnit[] unitPrefabs;
 
 	public HexGrid Grid { get; set; }
 
@@ -213,7 +213,7 @@ public class HexUnit : MonoBehaviour {
 		HexCoordinates coordinates = HexCoordinates.Load(reader);
 		float orientation = reader.ReadSingle();
 		grid.AddUnit(
-			Instantiate(unitPrefab), grid.GetCell(coordinates), orientation
+			Instantiate(unitPrefabs[0]), grid.GetCell(coordinates), orientation
 		);
 	}
 
