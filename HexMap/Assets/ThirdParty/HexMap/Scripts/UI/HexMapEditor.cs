@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using System.IO;
+using UnityEngine.UI;
 
 public class HexMapEditor : MonoBehaviour {
 
@@ -11,6 +12,8 @@ public class HexMapEditor : MonoBehaviour {
 	public Texture2DArray[] texture2DArrays;
 
 	public Transform leftPanel, rightPanel;
+
+	public Toggle toggleHeroNone;
 
 	int activeElevation;
 	int activeWaterLevel;
@@ -298,6 +301,7 @@ public class HexMapEditor : MonoBehaviour {
 						);
 					}
 				}
+				toggleHeroNone.isOn = true;
 			}
 		}
 	}

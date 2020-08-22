@@ -5,6 +5,7 @@ using UnityEngine;
 public class TouchScreen : MonoBehaviour
 {
     [SerializeField] HexMapCamera hexMapCamera;
+    [SerializeField] HexGameUI hexGameUI;
     Vector2 screenCenter = new Vector2(Screen.width / 2, Screen.height / 2);
     Vector2 lastMousePos;
     float deltaRotation = 0.6f;
@@ -17,6 +18,10 @@ public class TouchScreen : MonoBehaviour
 
     void LateUpdate()
     {
+        if (hexGameUI.selectedUnit)
+        {
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             float centerXOffset = Input.mousePosition.x - screenCenter.x;

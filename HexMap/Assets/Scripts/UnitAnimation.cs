@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class UnitAnimation : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class UnitAnimation : MonoBehaviour
 	float rotationSpeed = 30;
 	Vector3 inputVec;
 	Vector3 targetDirection;
+
+	private bool moveing = false;
 
 	//Warrior types
 	public enum Warrior { Karate, Ninja, Brute, Sorceress, Knight, Mage, Archer, TwoHanded, Swordsman, Spearman, Hammer, Crossbow };
@@ -71,6 +74,16 @@ public class UnitAnimation : MonoBehaviour
 
 	void FootL()
 	{
+	}
+
+	public void Move(bool move = true)
+	{
+		if (move == moveing)
+		{
+			return;
+		}
+		moveing = move;
+		animator.SetBool("Moving", move);
 	}
 
 	//void OnGUI () 

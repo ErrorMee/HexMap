@@ -7,7 +7,7 @@ public class HexGameUI : MonoBehaviour {
 
 	HexCell currentCell;
 
-	HexUnit selectedUnit;
+	public HexUnit selectedUnit;
 
 	public void SetEditMode (bool toggle) {
 		enabled = !toggle;
@@ -23,17 +23,47 @@ public class HexGameUI : MonoBehaviour {
 
 	void Update () {
 		if (!EventSystem.current.IsPointerOverGameObject()) {
-			if (Input.GetMouseButtonDown(0)) {
-				DoSelection();
-			}
-			else if (selectedUnit) {
-				if (Input.GetMouseButtonDown(1)) {
-					DoMove();
-				}
-				else {
+
+			if (selectedUnit)
+			{
+				if (Input.GetMouseButtonUp(0))
+				{
+					if (currentCell)
+					{
+						currentCell.DisableHighlight();
+					}
 					DoPathfinding();
+					DoMove();
+					if (selectedUnit)
+					{
+						selectedUnit = null;
+						currentCell.EnableHighlight(Color.blue / 2);
+					}
+				}
+				//else
+				//{
+				//	DoPathfinding();
+				//}
+			}
+			else 
+			{
+				if (Input.GetMouseButtonUp(0))
+				{
+					DoSelection();
 				}
 			}
+
+			//if (Input.GetMouseButtonDown(0)) {
+			//	DoSelection();
+			//}
+			//else if (selectedUnit) {
+			//	if (Input.GetMouseButtonDown(1)) {
+			//		DoMove();
+			//	}
+			//	else {
+			//		DoPathfinding();
+			//	}
+			//}
 		}
 	}
 
@@ -42,6 +72,10 @@ public class HexGameUI : MonoBehaviour {
 		UpdateCurrentCell();
 		if (currentCell) {
 			selectedUnit = currentCell.Unit;
+			if (selectedUnit)
+			{
+				currentCell.EnableHighlight(Color.yellow / 2);
+			}
 		}
 	}
 
@@ -59,7 +93,7 @@ public class HexGameUI : MonoBehaviour {
 	void DoMove () {
 		if (grid.HasPath) {
 			selectedUnit.Travel(grid.GetPath());
-			grid.ClearPath();
+			//grid.ClearPath();
 		}
 	}
 

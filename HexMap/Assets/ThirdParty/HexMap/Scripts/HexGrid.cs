@@ -47,7 +47,7 @@ public class HexGrid : MonoBehaviour {
 
 	int searchFrontierPhase;
 
-	HexCell currentPathFrom, currentPathTo;
+	public HexCell currentPathFrom, currentPathTo;
 	bool currentPathExists;
 
 	int currentCenterColumnIndex = -1;
@@ -397,13 +397,13 @@ public class HexGrid : MonoBehaviour {
 			HexCell current = currentPathTo;
 			while (current != currentPathFrom) {
 				int turn = (current.Distance - 1) / speed;
-				current.SetLabel(turn.ToString());
-				current.EnableHighlight(Color.white);
+				//current.SetLabel(turn.ToString());
+				current.EnableHighlight(Color.white / 2);
 				current = current.PathFrom;
 			}
 		}
-		currentPathFrom.EnableHighlight(Color.blue);
-		currentPathTo.EnableHighlight(Color.red);
+		//currentPathFrom.EnableHighlight(Color.blue / 2);
+		currentPathTo.EnableHighlight(Color.red / 2);
 	}
 
 	public void FindPath (HexCell fromCell, HexCell toCell, HexUnit unit) {

@@ -8531,6 +8531,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 1571186511}
+  selectedUnit: {fileID: 0}
 --- !u!1 &345848024
 GameObject:
   m_ObjectHideFlags: 0
@@ -10031,7 +10032,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 0
+  m_Text: '-'
 --- !u!222 &534332212
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -25267,6 +25268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexMapCamera: {fileID: 2102140320}
+  hexGameUI: {fileID: 333297601}
 --- !u!1 &2103893229
 GameObject:
   m_ObjectHideFlags: 0
@@ -25974,6 +25976,7 @@ MonoBehaviour:
   - {fileID: 18700000, guid: 7daa9851526309146b12301c00de465f, type: 2}
   leftPanel: {fileID: 1801720476}
   rightPanel: {fileID: 1479395908}
+  toggleHeroNone: {fileID: 2103893231}
 --- !u!1 &2145278234
 GameObject:
   m_ObjectHideFlags: 0

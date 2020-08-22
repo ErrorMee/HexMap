@@ -5,8 +5,10 @@ using System.IO;
 
 public class HexUnit : MonoBehaviour {
 
-	const float rotationSpeed = 180f;
-	const float travelSpeed = 4f;
+	const float rotationSpeed = 720f;
+	const float travelSpeed = 1.5f;
+
+	private UnitAnimation unitAnimation;
 
 	public static HexUnit[] unitPrefabs;
 
@@ -43,13 +45,13 @@ public class HexUnit : MonoBehaviour {
 
 	public int Speed {
 		get {
-			return 24;
+			return 8;
 		}
 	}
 
 	public int VisionRange {
 		get {
-			return 3;
+			return 10;
 		}
 	}
 
@@ -77,7 +79,6 @@ public class HexUnit : MonoBehaviour {
 	IEnumerator TravelPath () {
 		Vector3 a, b, c = pathToTravel[0].Position;
 		yield return LookAt(pathToTravel[1].Position);
-
 		if (!currentTravelLocation) {
 			currentTravelLocation = pathToTravel[0];
 		}
@@ -118,7 +119,7 @@ public class HexUnit : MonoBehaviour {
 			t -= 1f;
 		}
 		currentTravelLocation = null;
-
+		
 		a = c;
 		b = location.Position;
 		c = b;
@@ -129,8 +130,15 @@ public class HexUnit : MonoBehaviour {
 			d.y = 0f;
 			transform.localRotation = Quaternion.LookRotation(d);
 			yield return null;
-		}
 
+			if (t > 0.6f && unitAnimation)
+			{
+				unitAnimation.Move(false);
+			}
+		}
+		HexCell cell =
+			Grid.GetCell(transform.position);
+		cell.DisableHighlight();
 		transform.localPosition = location.Position;
 		orientation = transform.localRotation.eulerAngles.y;
 		ListPool<HexCell>.Add(pathToTravel);
@@ -138,6 +146,7 @@ public class HexUnit : MonoBehaviour {
 	}
 
 	IEnumerator LookAt (Vector3 point) {
+
 		if (HexMetrics.Wrapping) {
 			float xDistance = point.x - transform.localPosition.x;
 			if (xDistance < -HexMetrics.innerRadius * HexMetrics.wrapSize) {
@@ -166,7 +175,10 @@ public class HexUnit : MonoBehaviour {
 				yield return null;
 			}
 		}
-
+		if (unitAnimation)
+		{
+			unitAnimation.Move(true);
+		}
 		transform.LookAt(point);
 		orientation = transform.localRotation.eulerAngles.y;
 	}
@@ -218,6 +230,9 @@ public class HexUnit : MonoBehaviour {
 	}
 
 	void OnEnable () {
+
+		unitAnimation = GetComponent<UnitAnimation>();
+
 		if (location) {
 			transform.localPosition = location.Position;
 			if (currentTravelLocation) {
