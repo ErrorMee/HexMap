@@ -398,12 +398,12 @@ public class HexGrid : MonoBehaviour {
 			while (current != currentPathFrom) {
 				int turn = (current.Distance - 1) / speed;
 				//current.SetLabel(turn.ToString());
-				current.EnableHighlight(Color.white / 2);
+				current.EnableHighlight(Color.white - Color.black * 0.7f);
 				current = current.PathFrom;
 			}
 		}
 		//currentPathFrom.EnableHighlight(Color.blue / 2);
-		currentPathTo.EnableHighlight(Color.red / 2);
+		currentPathTo.EnableHighlight(Color.red - Color.black * 0.7f);
 	}
 
 	public void FindPath (HexCell fromCell, HexCell toCell, HexUnit unit) {

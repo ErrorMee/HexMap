@@ -116,6 +116,7 @@ public class HexUnit : MonoBehaviour {
 				yield return null;
 			}
 			Grid.DecreaseVisibility(pathToTravel[i], VisionRange);
+			pathToTravel[i].DisableHighlight();
 			t -= 1f;
 		}
 		currentTravelLocation = null;

@@ -37,7 +37,7 @@ public class HexGameUI : MonoBehaviour {
 					if (selectedUnit)
 					{
 						selectedUnit = null;
-						currentCell.EnableHighlight(Color.blue / 2);
+						currentCell.EnableHighlight(Color.blue - Color.black * 0.7f);
 					}
 				}
 				//else
@@ -74,7 +74,7 @@ public class HexGameUI : MonoBehaviour {
 			selectedUnit = currentCell.Unit;
 			if (selectedUnit)
 			{
-				currentCell.EnableHighlight(Color.yellow / 2);
+				currentCell.EnableHighlight(Color.yellow - Color.black * 0.7f);
 			}
 		}
 	}
