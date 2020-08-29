@@ -14,7 +14,6 @@ public class HexGrid : MonoBehaviour {
 	public bool wrapping;
 
 	public HexCell cellPrefab;
-	public Text cellLabelPrefab;
 	public HexGridChunk chunkPrefab;
 	public HexUnit[] unitPrefabs;
 
@@ -140,7 +139,7 @@ public class HexGrid : MonoBehaviour {
 				HexCell cell = GetCell(new HexCoordinates(x, z));
 				if (cell != null)
 				{
-					cell.BuildEnable = true;
+					cell.chunk.highlights.InitBuild(cell);
 				}
 			}
 		}
@@ -151,7 +150,7 @@ public class HexGrid : MonoBehaviour {
 				HexCell cell = GetCell(new HexCoordinates(x, z));
 				if (cell != null)
 				{
-					cell.BuildEnable = true;
+					cell.chunk.highlights.InitBuild(cell);
 				}
 			}
 		}
@@ -235,12 +234,6 @@ public class HexGrid : MonoBehaviour {
 		return cells[cellIndex];
 	}
 
-	public void ShowUI (bool visible) {
-		for (int i = 0; i < chunks.Length; i++) {
-			chunks[i].ShowUI(visible);
-		}
-	}
-
 	void CreateCell (int x, int z, int i) {
 		Vector3 position;
 		position.x = (x + z * 0.5f - z / 2) * HexMetrics.innerDiameter;
@@ -290,11 +283,6 @@ public class HexGrid : MonoBehaviour {
 				}
 			}
 		}
-
-		Text label = Instantiate<Text>(cellLabelPrefab);
-		label.rectTransform.anchoredPosition =
-			new Vector2(position.x, position.z);
-		cell.uiRect = label.rectTransform;
 
 		cell.Elevation = 0;
 
@@ -378,7 +366,6 @@ public class HexGrid : MonoBehaviour {
 		if (currentPathExists) {
 			HexCell current = currentPathTo;
 			while (current != currentPathFrom) {
-				current.SetLabel(null);
 				current.DisableHighlight();
 				current = current.PathFrom;
 			}
@@ -397,13 +384,11 @@ public class HexGrid : MonoBehaviour {
 			HexCell current = currentPathTo;
 			while (current != currentPathFrom) {
 				int turn = (current.Distance - 1) / speed;
-				//current.SetLabel(turn.ToString());
-				current.EnableHighlight(Color.white - Color.black * 0.7f);
+				current.EnableHighlight(Color.green);
 				current = current.PathFrom;
 			}
 		}
-		//currentPathFrom.EnableHighlight(Color.blue / 2);
-		currentPathTo.EnableHighlight(Color.red - Color.black * 0.7f);
+		currentPathTo.EnableHighlight(Color.green);
 	}
 
 	public void FindPath (HexCell fromCell, HexCell toCell, HexUnit unit) {

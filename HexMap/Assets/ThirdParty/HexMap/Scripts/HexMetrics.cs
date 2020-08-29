@@ -19,9 +19,9 @@ public static class HexMetrics {
 
 	public const float waterBlendFactor = 1f - waterFactor;
 
-	public const float elevationStep = 2.1f;
+	public const float elevationStep = 2f;
 
-	public const int terracesPerSlope = 2;
+	public const int terracesPerSlope = 1;
 
 	public const int terraceSteps = terracesPerSlope * 2 + 1;
 
@@ -57,7 +57,7 @@ public static class HexMetrics {
 
 	public const float hashGridScale = 0.25f;
 
-	public const int editRadiu = 3;
+	public const int editRadiu = 4;
 
 	static HexHash[] hashGrid;
 

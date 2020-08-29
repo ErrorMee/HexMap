@@ -105,7 +105,7 @@ public class HexMapCamera : MonoBehaviour {
 	public void CenterAlign()
 	{
 		Vector3 position = transform.localPosition;
-		position.x = (grid.cellChunkCountX - 0.5f) * HexMetrics.innerDiameter / 2;
+		position.x = (grid.cellChunkCountX) * HexMetrics.innerDiameter / 2;
 		position.z = (grid.cellChunkCountZ - 1) * (1.5f * HexMetrics.outerRadius) / 2;
 		transform.localPosition =
 			grid.wrapping ? WrapPosition(position) : ClampPosition(position);

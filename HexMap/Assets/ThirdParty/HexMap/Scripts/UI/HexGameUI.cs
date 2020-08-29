@@ -11,7 +11,6 @@ public class HexGameUI : MonoBehaviour {
 
 	public void SetEditMode (bool toggle) {
 		enabled = !toggle;
-		grid.ShowUI(!toggle);
 		grid.ClearPath();
 		if (toggle) {
 			Shader.EnableKeyword("HEX_MAP_EDIT_MODE");
@@ -32,18 +31,17 @@ public class HexGameUI : MonoBehaviour {
 					{
 						currentCell.DisableHighlight();
 					}
-					DoPathfinding();
-					DoMove();
+					bool hasPath = DoPathfinding();
+					if (hasPath)
+					{
+						DoMove();
+					}
+					
 					if (selectedUnit)
 					{
 						selectedUnit = null;
-						currentCell.EnableHighlight(Color.blue - Color.black * 0.7f);
 					}
 				}
-				//else
-				//{
-				//	DoPathfinding();
-				//}
 			}
 			else 
 			{
@@ -74,20 +72,27 @@ public class HexGameUI : MonoBehaviour {
 			selectedUnit = currentCell.Unit;
 			if (selectedUnit)
 			{
-				currentCell.EnableHighlight(Color.yellow - Color.black * 0.7f);
+				currentCell.EnableHighlight(Color.yellow);
 			}
 		}
 	}
 
-	void DoPathfinding () {
+	bool DoPathfinding () {
 		if (UpdateCurrentCell()) {
-			if (currentCell && selectedUnit.IsValidDestination(currentCell)) {
-				grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
-			}
-			else {
-				grid.ClearPath();
+			if (currentCell.highlightQuad && currentCell.highlightQuad.buildEnable)
+			{
+				if (currentCell && selectedUnit.IsValidDestination(currentCell))
+				{
+					grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
+					return true;
+				}
+				else
+				{
+					grid.ClearPath();
+				}
 			}
 		}
+		return false;
 	}
 
 	void DoMove () {

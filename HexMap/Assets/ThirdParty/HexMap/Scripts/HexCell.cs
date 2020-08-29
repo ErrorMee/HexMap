@@ -6,48 +6,13 @@ public class HexCell : MonoBehaviour {
 
 	public HexCoordinates coordinates;
 
-	public RectTransform uiRect;
-
 	public HexGridChunk chunk;
 
 	public int Index { get; set; }
 
 	public int ColumnIndex { get; set; }
 
-	private HighlightQuadType highlightQuad = HighlightQuadType.None;
-
-	public HighlightQuadType HighlightQuad
-	{
-		get
-		{
-			return highlightQuad;
-		}
-		set
-		{
-			highlightQuad = value;
-
-			chunk.highlights.SetHighlightQuad(this, this.Position);
-		}
-	}
-
-	private bool buildEnable = false;
-	public bool BuildEnable 
-	{
-		get {
-			return buildEnable;
-		}
-		set{
-			buildEnable = value;
-			if (buildEnable)
-			{
-				HighlightQuad = HighlightQuadType.Build;
-			}
-			else
-			{
-				HighlightQuad = HighlightQuadType.None;
-			}
-		}
-	}
+	public HighlightQuad highlightQuad;
 
 	public int Elevation {
 		get {
@@ -505,9 +470,10 @@ public class HexCell : MonoBehaviour {
 			HexMetrics.elevationPerturbStrength;
 		transform.localPosition = position;
 
-		Vector3 uiPosition = uiRect.localPosition;
-		uiPosition.z = -position.y;
-		uiRect.localPosition = uiPosition;
+		if (highlightQuad)
+		{
+			highlightQuad.UpdatePostion(position);
+		}
 	}
 
 	void Refresh () {
@@ -608,20 +574,19 @@ public class HexCell : MonoBehaviour {
 		ShaderData.RefreshVisibility(this);
 	}
 
-	public void SetLabel (string text) {
-		UnityEngine.UI.Text label = uiRect.GetComponent<Text>();
-		label.text = text;
-	}
-
 	public void DisableHighlight () {
-		Image highlight = uiRect.GetChild(0).GetComponent<Image>();
-		highlight.enabled = false;
+		if (highlightQuad)
+		{
+			highlightQuad.ClearColor();
+		}
 	}
 
 	public void EnableHighlight (Color color) {
-		Image highlight = uiRect.GetChild(0).GetComponent<Image>();
-		highlight.color = color;
-		highlight.enabled = true;
+		if (!highlightQuad)
+		{
+			chunk.highlights.InitPath(this);
+		}
+		highlightQuad.SetColor(color);
 	}
 
 	public void SetMapData (float data) {
