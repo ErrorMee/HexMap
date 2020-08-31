@@ -34,7 +34,7 @@ public class HighlightQuadManager : MonoBehaviour
     {
         HighlightQuad highlightQuad = Instantiate(prefabHighlightQuad);
 
-        highlightQuad.UpdatePostion(cell.Position);
+        highlightQuad.UpdatePostion(cell.Position, 0);
 
         highlightQuad.transform.SetParent(container, false);
         cell.highlightQuad = highlightQuad;

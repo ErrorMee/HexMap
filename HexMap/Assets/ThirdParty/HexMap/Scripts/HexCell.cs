@@ -472,7 +472,7 @@ public class HexCell : MonoBehaviour {
 
 		if (highlightQuad)
 		{
-			highlightQuad.UpdatePostion(position);
+			highlightQuad.UpdatePostion(position, elevation);
 		}
 	}
 

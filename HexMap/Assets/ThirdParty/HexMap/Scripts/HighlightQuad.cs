@@ -4,20 +4,24 @@ using UnityEngine;
 
 public class HighlightQuad : MonoBehaviour
 {
+    private int elevation;
+
     public bool buildEnable = false;
     public MeshFilter meshFilter;
     public MeshRenderer meshRenderer;
     private Color[] meshColors;
 
-    public void UpdatePostion(Vector3 postion)
+    public void UpdatePostion(Vector3 postion, int elevation)
     {
+        this.elevation = elevation;
         postion.y += HexMetrics.elevationPerturbStrength * 0.2f;
         transform.position = postion;
+        meshRenderer.enabled = elevation == 0;
     }
 
     public void ClearColor()
     {
-        if (buildEnable)
+        if (buildEnable && elevation == 0)
         {
             if (meshColors == null)
             {
