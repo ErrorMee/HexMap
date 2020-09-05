@@ -64,7 +64,8 @@ public class HexUnit : MonoBehaviour {
 	}
 
 	public bool IsValidDestination (HexCell cell) {
-		return cell.IsExplored && !cell.IsUnderwater && !cell.Unit;
+		return !cell.IsUnderwater && cell.SpecialIndex == 0;
+		//return cell.IsExplored && !cell.IsUnderwater && !cell.Unit;
 	}
 
 	public void Travel (List<HexCell> path) {

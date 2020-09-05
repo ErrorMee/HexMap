@@ -13,6 +13,7 @@ public class HexMapEditor : MonoBehaviour {
 
 	public Transform leftPanel, rightPanel;
 
+	public Toggle toggleHouseNone;
 	public Toggle toggleHeroNone;
 
 	int activeElevation;
@@ -252,6 +253,7 @@ public class HexMapEditor : MonoBehaviour {
 			}
 			if (applySpecialIndex) {
 				cell.SpecialIndex = activeSpecialIndex;
+				toggleHouseNone.isOn = false;
 			}
 			if (applyUrbanLevel) {
 				cell.UrbanLevel = activeUrbanLevel;
@@ -283,7 +285,7 @@ public class HexMapEditor : MonoBehaviour {
 				}
 			}
 
-			if (activeHeroTypeIndex >= 0)
+			if (activeHeroTypeIndex >= 0 && cell.SpecialIndex == 0)
 			{
 				if (activeHeroTypeIndex == 0)
 				{
