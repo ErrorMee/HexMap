@@ -76,11 +76,12 @@
 				cell0.y * v.color.x + cell1.y * v.color.y + cell2.y * v.color.z;
 
 			data.worldNormal = UnityObjectToWorldNormal(v.normal);
-
+			
 			#if defined(SHOW_MAP_DATA)
 				data.mapData = cell0.z * v.color.x + cell1.z * v.color.y +
 					cell2.z * v.color.z;
 			#endif
+				
 		}
 
 		fixed4 GetTerrainColor (Input IN, int index) {

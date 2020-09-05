@@ -13,8 +13,9 @@ public class HexMapEditor : MonoBehaviour {
 
 	public Transform leftPanel, rightPanel;
 
-	public Toggle toggleHouseNone;
 	public Toggle toggleHeroNone;
+	public Toggle toggleHouseNone;
+	public Toggle togglePlanNone;
 
 	int activeElevation;
 	int activeWaterLevel;
@@ -263,6 +264,7 @@ public class HexMapEditor : MonoBehaviour {
 			}
 			if (applyPlantLevel) {
 				cell.PlantLevel = activePlantLevel;
+				togglePlanNone.isOn = false;
 			}
 			if (riverMode == OptionalToggle.No) {
 				cell.RemoveRiver();

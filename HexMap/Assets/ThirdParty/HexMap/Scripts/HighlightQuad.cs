@@ -14,7 +14,7 @@ public class HighlightQuad : MonoBehaviour
     public void UpdatePostion(Vector3 postion, int elevation)
     {
         this.elevation = elevation;
-        postion.y += HexMetrics.elevationPerturbStrength * 0.2f;
+        postion.y += 0.1f;
         transform.position = postion;
         meshRenderer.enabled = elevation == 0;
     }
