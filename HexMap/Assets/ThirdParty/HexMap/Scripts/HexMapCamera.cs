@@ -106,7 +106,7 @@ public class HexMapCamera : MonoBehaviour {
 	{
 		Vector3 position = transform.localPosition;
 		position.x = (grid.cellChunkCountX) * HexMetrics.innerDiameter / 2;
-		position.z = (grid.cellChunkCountZ - 1) * (1.5f * HexMetrics.outerRadius) / 2;
+		position.z = (grid.cellChunkCountZ) * (1.5f * HexMetrics.outerRadius) / 2;
 		transform.localPosition =
 			grid.wrapping ? WrapPosition(position) : ClampPosition(position);
 	}

@@ -9,7 +9,9 @@
 		_CliffColor("Cliff Color", Color) = (1, 0.95, 0.75, 1)
 		_RockColor("Rock Color", Color) = (1, 0.95, 0.75, 1)
 		_StepColor("Step Color", Color) = (1, 0.95, 0.75, 1)
+		_SandColor("Sand Color", Color) = (1, 0.95, 0.75, 1)
 		_ElevationStep("ElevationStep", Range(1,5)) = 2.1
+		_Focus("Focus", Vector) = (50, 50, 20, 60)
 		[Toggle(SHOW_MAP_DATA)]_ShowMapData ("Show Map Data", Float) = 0
 
 	}
@@ -40,7 +42,9 @@
 		fixed4 _CliffColor;
 		fixed4 _RockColor;
 		fixed4 _StepColor;
+		fixed4 _SandColor;
 		half _ElevationStep;
+		fixed4 _Focus;
 
 		struct Input {
 			float4 color : COLOR;
@@ -105,6 +109,12 @@
 			float isStep = step(0.85, IN.worldNormal.y) * 
 				step(_ElevationStep * 0.25, blockHeight) * step(blockHeight, _ElevationStep * 0.75);
 			c = lerp(c, _StepColor, isStep * 0.5);
+
+			float centerDis = length(IN.worldPos.xz - _Focus.xy);
+
+			float glow = smoothstep(0, 1, (centerDis - _Focus.z) / _Focus.w);
+
+			c = lerp(c, _SandColor, glow);
 
 			/*float4 cNext = UNITY_SAMPLE_TEX2DARRAY(_MainTex, float3(
 				IN.worldPos.xz * tilingScale,
