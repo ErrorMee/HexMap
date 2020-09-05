@@ -733,7 +733,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.69411767, g: 0.81960785, b: 0.5137255, a: 1}
+  m_BackGroundColor: {r: 0.89411765, g: 0.972549, b: 0.9411765, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -15665,14 +15665,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1067100554}
-  m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
+  m_LocalRotation: {x: 0.24192187, y: 0, z: 0, w: 0.9702957}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1752896679}
   m_Father: {fileID: 2102140319}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 28, y: 0, z: 0}
 --- !u!1 &1069721675
 GameObject:
   m_ObjectHideFlags: 0
@@ -20109,13 +20109,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414a0fc06528949a0baff4f719b04a4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cellChunkCountX: 6
-  cellChunkCountZ: 8
+  cellChunkCountX: 5
+  cellChunkCountZ: 6
   generateMaps: 0
   mapGenerator: {fileID: 2056945512}
   wrapping: 0
   cellPrefab: {fileID: 11422220, guid: 94c2312396697489abc866a188f80152, type: 3}
-  cellLabelPrefab: {fileID: 11470134, guid: f68794ca03b6f4510b9a5bd6ee9ba2f4, type: 3}
   chunkPrefab: {fileID: 114000010052569294, guid: 7622d007cafd044a1b1189c0b93d2912,
     type: 3}
   unitPrefabs:
@@ -25624,8 +25623,8 @@ MonoBehaviour:
   transformLight: {fileID: 2019527341}
   stickMinZoom: -100
   stickMaxZoom: -100
-  swivelMinZoom: 30
-  swivelMaxZoom: 30
+  swivelMinZoom: 28
+  swivelMaxZoom: 28
   moveSpeedMinZoom: 400
   moveSpeedMaxZoom: 100
   rotationSpeed: 180
