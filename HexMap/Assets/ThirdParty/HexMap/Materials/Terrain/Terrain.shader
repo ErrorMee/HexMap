@@ -8,6 +8,7 @@
 		_BackgroundColor ("Background Color", Color) = (0,0,0)
 		_CliffColor("Cliff Color", Color) = (1, 0.95, 0.75, 1)
 		_RockColor("Rock Color", Color) = (1, 0.95, 0.75, 1)
+		_StepColor("Step Color", Color) = (1, 0.95, 0.75, 1)
 		_ElevationStep("ElevationStep", Range(1,5)) = 2.1
 		[Toggle(SHOW_MAP_DATA)]_ShowMapData ("Show Map Data", Float) = 0
 
@@ -38,6 +39,7 @@
 		half3 _BackgroundColor;
 		fixed4 _CliffColor;
 		fixed4 _RockColor;
+		fixed4 _StepColor;
 		half _ElevationStep;
 
 		struct Input {
@@ -77,16 +79,16 @@
 			#endif
 		}
 
-		float4 GetTerrainColor (Input IN, int index) {
-			float3 uvw = float3(
+		fixed4 GetTerrainColor (Input IN, int index) {
+			fixed3 uvw = float3(
 				IN.worldPos.xz * (4 * TILING_SCALE),
 				IN.terrain[index]
 			);
-			float4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, uvw);
+			fixed4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, uvw);
 			return c * (IN.color[index] * IN.visibility[index]);
 		}
 
-		float4 GetRockColor(Input IN)
+		fixed4 GetRockColor(Input IN)
 		{
 			float tilingScale = 4 * TILING_SCALE;
 
@@ -95,10 +97,15 @@
 			float rawIndex = height / _ElevationStep + _ElevationStep / 3;
 			int index = (rawIndex);
 
-			float4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, float3(
+			fixed4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, float3(
 				IN.worldPos.xz * tilingScale,
 				index));
 			
+			float blockHeight = height % _ElevationStep;
+			float isStep = step(0.85, IN.worldNormal.y) * 
+				step(_ElevationStep * 0.25, blockHeight) * step(blockHeight, _ElevationStep * 0.75);
+			c = lerp(c, _StepColor, isStep * 0.5);
+
 			/*float4 cNext = UNITY_SAMPLE_TEX2DARRAY(_MainTex, float3(
 				IN.worldPos.xz * tilingScale,
 				index + 1));
@@ -126,7 +133,7 @@
 			float h = IN.worldPos.y % 2 + sin(IN.worldPos.x * 4) / 5;
 			c.rgb = lerp(c.rgb, step(h, 1) * _RockColor.rgb + step(1, h) * _CliffColor.rgb, 
 				(step(h, 1) * _RockColor.a + step(1, h) * _CliffColor.a) * step(IN.worldNormal.y, 0.85));
-			
+
 			fixed4 grid = 1;
 			#if defined(GRID_ON)
 				float2 gridUV = IN.worldPos.xz;
