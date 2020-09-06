@@ -391,6 +391,26 @@ public class HexGrid : MonoBehaviour {
 		currentPathTo.EnableHighlight(Color.green);
 	}
 
+	public bool CanMoveIn(HexCell moveInCell)
+	{
+		if (moveInCell.Unit == null)
+		{
+			return true;
+		}
+		else {
+
+			for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+			{
+				HexCell toCell = moveInCell.GetNeighbor(d);
+                if(toCell != null && toCell.Unit == null && Search(moveInCell, toCell, moveInCell.Unit)) 
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public void FindPath (HexCell fromCell, HexCell toCell, HexUnit unit) {
 		ClearPath();
 		currentPathFrom = fromCell;
@@ -399,7 +419,7 @@ public class HexGrid : MonoBehaviour {
 		ShowPath(unit.Speed);
 	}
 
-	bool Search (HexCell fromCell, HexCell toCell, HexUnit unit) {
+	public bool Search (HexCell fromCell, HexCell toCell, HexUnit unit) {
 		int speed = unit.Speed;
 		searchFrontierPhase += 2;
 		if (searchFrontier == null) {

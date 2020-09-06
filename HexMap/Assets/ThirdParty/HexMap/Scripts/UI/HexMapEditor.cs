@@ -15,7 +15,7 @@ public class HexMapEditor : MonoBehaviour {
 
 	public Toggle toggleHeroNone;
 	public Toggle toggleHouseNone;
-	public Toggle togglePlanNone;
+	public Toggle togglePlantNone;
 
 	int activeElevation;
 	int activeWaterLevel;
@@ -30,7 +30,7 @@ public class HexMapEditor : MonoBehaviour {
 	bool applyElevation = false;
 	bool applyWaterLevel = true;
 
-	bool applyUrbanLevel, applyFarmLevel, applyPlantLevel, applySpecialIndex;
+	bool applyUrbanLevel, applyFarmLevel;
 
 	enum OptionalToggle {
 		Ignore, Yes, No
@@ -80,16 +80,8 @@ public class HexMapEditor : MonoBehaviour {
 		activeFarmLevel = (int)level;
 	}
 
-	public void SetApplyPlantLevel (bool toggle) {
-		applyPlantLevel = toggle;
-	}
-
 	public void SetPlantLevel (float level) {
 		activePlantLevel = (int)level;
-	}
-
-	public void SetApplySpecialIndex (bool toggle) {
-		applySpecialIndex = toggle;
 	}
 
 	public void SetSpecialIndex (float index) {
@@ -252,9 +244,9 @@ public class HexMapEditor : MonoBehaviour {
 			if (applyWaterLevel) {
 				cell.WaterLevel = activeWaterLevel;
 			}
-			if (applySpecialIndex) {
+			if (activeSpecialIndex > -1) {
 				cell.SpecialIndex = activeSpecialIndex;
-				toggleHouseNone.isOn = false;
+				toggleHouseNone.isOn = true;
 			}
 			if (applyUrbanLevel) {
 				cell.UrbanLevel = activeUrbanLevel;
@@ -262,9 +254,9 @@ public class HexMapEditor : MonoBehaviour {
 			if (applyFarmLevel) {
 				cell.FarmLevel = activeFarmLevel;
 			}
-			if (applyPlantLevel) {
+			if (activePlantLevel > -1) {
 				cell.PlantLevel = activePlantLevel;
-				togglePlanNone.isOn = false;
+				togglePlantNone.isOn = true;
 			}
 			if (riverMode == OptionalToggle.No) {
 				cell.RemoveRiver();

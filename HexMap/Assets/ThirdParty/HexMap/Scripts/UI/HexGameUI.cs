@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class HexGameUI : MonoBehaviour {
@@ -81,7 +82,9 @@ public class HexGameUI : MonoBehaviour {
 		if (UpdateCurrentCell()) {
 			if (currentCell.highlightQuad && currentCell.highlightQuad.buildEnable)
 			{
-				if (currentCell && selectedUnit.IsValidDestination(currentCell))
+				if (currentCell && selectedUnit.IsValidDestination(currentCell) 
+					&& currentCell.Unit == null)
+					//grid.CanMoveIn(currentCell))
 				{
 					grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
 					return true;
@@ -97,9 +100,25 @@ public class HexGameUI : MonoBehaviour {
 
 	void DoMove () {
 		if (grid.HasPath) {
-			selectedUnit.Travel(grid.GetPath());
-			//grid.ClearPath();
-		}
+			List<HexCell> pathCell = grid.GetPath();
+
+			//HexCell endCell = pathCell[pathCell.Count - 1];
+			//if (endCell.Unit != null)
+			//{
+			//	for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+			//	{
+			//		HexCell toCell = endCell.GetNeighbor(d);
+			//		if (toCell != null && toCell.Unit == null && grid.Search(endCell, toCell, endCell.Unit))
+			//		{
+			//			endCell.Unit.Travel(new List<HexCell>() { endCell, toCell });
+			//			break;
+			//		}
+			//	}
+			//}
+
+			selectedUnit.Travel(pathCell);
+            //grid.ClearPath();
+        }
 	}
 
 	bool UpdateCurrentCell () {

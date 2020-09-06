@@ -80,6 +80,7 @@ MonoBehaviour:
   - {fileID: 1473365888783583587, guid: 6e6bc8a26a237ea4fad8fe0d0b45c4b7, type: 3}
   - {fileID: 4277052537548624339, guid: 4ceff8469ddca2245a21277623014df1, type: 3}
   - {fileID: 5784129723635350101, guid: d3125277923b2664bbfebc87a73b12c3, type: 3}
+  - {fileID: 4221502166889478499, guid: a3f74a8595b01e54b84ab014db15e806, type: 3}
 --- !u!1 &1000010764466194
 GameObject:
   m_ObjectHideFlags: 0

@@ -41,12 +41,12 @@ public static class HexMetrics {
 	/// <summary>
 	/// 位置扰乱
 	/// </summary>
-	public const float cellPerturbStrength = 0.5f;
+	public const float cellPerturbStrength = 0.4f;
 
 	/// <summary>
 	/// 高度扰乱
 	/// </summary>
-	public const float elevationPerturbStrength = 0.5f;
+	public const float elevationPerturbStrength = 0.2f;
 
 	public const float streamBedElevationOffset = -1.75f;
 
@@ -64,7 +64,7 @@ public static class HexMetrics {
 
 	public const float bridgeDesignLength = 7f;
 
-	public const float noiseScale = 0.002f;
+	public const float noiseScale = 0.01f;
 
 	public const int chunkSizeX = 3, chunkSizeZ = 3;
 
