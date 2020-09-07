@@ -1,8 +1,6 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
 
 public class HexGrid : MonoBehaviour {
 
@@ -74,16 +72,15 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 
-	public void AddUnit (Team unit, short id, HexCell location, float orientation) {
+	public void AddTeam (Team unit, short id, HexCell location, float orientation) {
 		units.Add(unit);
 		unit.Grid = this;
 		unit.Location = location;
 		unit.Orientation = orientation;
 		unit.ID = id;
-		unit.Type = UnitType.Hero;
 	}
 
-	public void RemoveUnit (Team unit) {
+	public void RemoveTeam (Team unit) {
 		units.Remove(unit);
 		unit.Die();
 	}
@@ -102,7 +99,7 @@ public class HexGrid : MonoBehaviour {
 		}
 
 		ClearPath();
-		ClearUnits();
+		ClearTeams();
 		if (columns != null) {
 			for (int i = 0; i < columns.Length; i++) {
 				Destroy(columns[i].gameObject);
@@ -185,7 +182,7 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 
-	void ClearUnits () {
+	void ClearTeams () {
 		for (int i = 0; i < units.Count; i++) {
 			units[i].Die();
 		}
@@ -318,7 +315,7 @@ public class HexGrid : MonoBehaviour {
 
 	public void Load (BinaryReader reader, int header) {
 		ClearPath();
-		ClearUnits();
+		ClearTeams();
 		int x = 20, z = 15;
 		if (header >= 1) {
 			x = reader.ReadInt32();

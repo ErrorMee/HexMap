@@ -3,14 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-public enum UnitType
-{
-	Hero,
-	HeroSoldier,
-	Boss,
-	BossSoldier
-}
-
 public class Team : MonoBehaviour {
 
 	const float rotationSpeed = 720f;
@@ -21,8 +13,6 @@ public class Team : MonoBehaviour {
 	public static Team[] unitPrefabs;
 
 	public short ID { get; set; }
-
-	public UnitType Type { get; set; }
 
 	public HexGrid Grid { get; set; }
 
@@ -240,7 +230,7 @@ public class Team : MonoBehaviour {
 		HexCoordinates coordinates = HexCoordinates.Load(reader);
 		short id = reader.ReadInt16();
 		float orientation = reader.ReadSingle();
-		grid.AddUnit(
+		grid.AddTeam(
 			Instantiate(unitPrefabs[id - 1]), id, grid.GetCell(coordinates), orientation
 		);
 	}

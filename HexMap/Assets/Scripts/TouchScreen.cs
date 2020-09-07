@@ -18,7 +18,7 @@ public class TouchScreen : MonoBehaviour
 
     void LateUpdate()
     {
-        if (hexGameUI.selectedUnit)
+        if (hexGameUI.selectedTeam)
         {
             return;
         }

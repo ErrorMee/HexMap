@@ -285,14 +285,14 @@ public class HexMapEditor : MonoBehaviour {
 				{
 					if (cell.Team)
 					{
-						hexGrid.RemoveUnit(cell.Team);
+						hexGrid.RemoveTeam(cell.Team);
 					}
 				}
 				else
 				{
 					if (!cell.Team)
 					{
-						hexGrid.AddUnit(
+						hexGrid.AddTeam(
 							Instantiate(Team.unitPrefabs[activeHeroTypeIndex - 1]), 
 							(short)activeHeroTypeIndex, cell, Random.Range(0f, 360f)
 						);

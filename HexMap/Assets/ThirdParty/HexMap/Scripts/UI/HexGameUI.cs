@@ -8,7 +8,7 @@ public class HexGameUI : MonoBehaviour {
 
 	HexCell currentCell;
 
-	public Team selectedUnit;
+	public Team selectedTeam;
 
 	public void SetEditMode (bool toggle) {
 		enabled = !toggle;
@@ -24,7 +24,7 @@ public class HexGameUI : MonoBehaviour {
 	void Update () {
 		if (!EventSystem.current.IsPointerOverGameObject()) {
 
-			if (selectedUnit)
+			if (selectedTeam)
 			{
 				if (Input.GetMouseButtonUp(0))
 				{
@@ -38,9 +38,9 @@ public class HexGameUI : MonoBehaviour {
 						DoMove();
 					}
 					
-					if (selectedUnit)
+					if (selectedTeam)
 					{
-						selectedUnit = null;
+						selectedTeam = null;
 					}
 				}
 			}
@@ -70,8 +70,8 @@ public class HexGameUI : MonoBehaviour {
 		grid.ClearPath();
 		UpdateCurrentCell();
 		if (currentCell) {
-			selectedUnit = currentCell.Team;
-			if (selectedUnit)
+			selectedTeam = currentCell.Team;
+			if (selectedTeam)
 			{
 				currentCell.EnableHighlight(Color.yellow);
 			}
@@ -82,11 +82,11 @@ public class HexGameUI : MonoBehaviour {
 		if (UpdateCurrentCell()) {
 			if (currentCell.highlightQuad && currentCell.highlightQuad.buildEnable)
 			{
-				if (currentCell && selectedUnit.IsValidDestination(currentCell) 
+				if (currentCell && selectedTeam.IsValidDestination(currentCell) 
 					&& currentCell.Team == null)
 					//grid.CanMoveIn(currentCell))
 				{
-					grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
+					grid.FindPath(selectedTeam.Location, currentCell, selectedTeam);
 					return true;
 				}
 				else
@@ -116,7 +116,7 @@ public class HexGameUI : MonoBehaviour {
 			//	}
 			//}
 
-			selectedUnit.Travel(pathCell);
+			selectedTeam.Travel(pathCell);
             //grid.ClearPath();
         }
 	}
