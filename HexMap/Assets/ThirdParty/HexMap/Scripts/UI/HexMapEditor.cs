@@ -293,7 +293,8 @@ public class HexMapEditor : MonoBehaviour {
 					if (!cell.Unit)
 					{
 						hexGrid.AddUnit(
-							Instantiate(HexUnit.unitPrefabs[activeHeroTypeIndex - 1]), cell, Random.Range(0f, 360f)
+							Instantiate(HexUnit.unitPrefabs[activeHeroTypeIndex - 1]), 
+							(short)activeHeroTypeIndex, cell, Random.Range(0f, 360f)
 						);
 					}
 				}

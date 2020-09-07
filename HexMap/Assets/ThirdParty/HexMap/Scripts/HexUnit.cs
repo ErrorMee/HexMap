@@ -3,6 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
+public enum UnitType
+{
+	Hero,
+	HeroSoldier,
+	Boss,
+	BossSoldier
+}
+
 public class HexUnit : MonoBehaviour {
 
 	const float rotationSpeed = 720f;
@@ -11,6 +19,10 @@ public class HexUnit : MonoBehaviour {
 	private UnitAnimation unitAnimation;
 
 	public static HexUnit[] unitPrefabs;
+
+	public short ID { get; set; }
+
+	public UnitType Type { get; set; }
 
 	public HexGrid Grid { get; set; }
 
@@ -220,14 +232,16 @@ public class HexUnit : MonoBehaviour {
 
 	public void Save (BinaryWriter writer) {
 		location.coordinates.Save(writer);
+		writer.Write(ID);
 		writer.Write(orientation);
 	}
 
 	public static void Load (BinaryReader reader, HexGrid grid) {
 		HexCoordinates coordinates = HexCoordinates.Load(reader);
+		short id = reader.ReadInt16();
 		float orientation = reader.ReadSingle();
 		grid.AddUnit(
-			Instantiate(unitPrefabs[0]), grid.GetCell(coordinates), orientation
+			Instantiate(unitPrefabs[id - 1]), id, grid.GetCell(coordinates), orientation
 		);
 	}
 
@@ -244,28 +258,4 @@ public class HexUnit : MonoBehaviour {
 			}
 		}
 	}
-
-//	void OnDrawGizmos () {
-//		if (pathToTravel == null || pathToTravel.Count == 0) {
-//			return;
-//		}
-//
-//		Vector3 a, b, c = pathToTravel[0].Position;
-//
-//		for (int i = 1; i < pathToTravel.Count; i++) {
-//			a = c;
-//			b = pathToTravel[i - 1].Position;
-//			c = (b + pathToTravel[i].Position) * 0.5f;
-//			for (float t = 0f; t < 1f; t += 0.1f) {
-//				Gizmos.DrawSphere(Bezier.GetPoint(a, b, c, t), 2f);
-//			}
-//		}
-//
-//		a = c;
-//		b = pathToTravel[pathToTravel.Count - 1].Position;
-//		c = b;
-//		for (float t = 0f; t < 1f; t += 0.1f) {
-//			Gizmos.DrawSphere(Bezier.GetPoint(a, b, c, t), 2f);
-//		}
-//	}
 }

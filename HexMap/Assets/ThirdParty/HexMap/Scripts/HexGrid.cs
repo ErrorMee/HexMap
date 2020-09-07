@@ -74,11 +74,13 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 
-	public void AddUnit (HexUnit unit, HexCell location, float orientation) {
+	public void AddUnit (HexUnit unit, short id, HexCell location, float orientation) {
 		units.Add(unit);
 		unit.Grid = this;
 		unit.Location = location;
 		unit.Orientation = orientation;
+		unit.ID = id;
+		unit.Type = UnitType.Hero;
 	}
 
 	public void RemoveUnit (HexUnit unit) {
