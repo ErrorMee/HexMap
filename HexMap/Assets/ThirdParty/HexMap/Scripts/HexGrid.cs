@@ -49,7 +49,7 @@ public class HexGrid : MonoBehaviour {
 
 	int currentCenterColumnIndex = -1;
 
-	List<Team> units = new List<Team>();
+	List<Team> teams = new List<Team>();
 
 	HexCellShaderData cellShaderData;
 
@@ -72,17 +72,35 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 
-	public void AddTeam (Team unit, short id, HexCell location, float orientation) {
-		units.Add(unit);
-		unit.Grid = this;
-		unit.Location = location;
-		unit.Orientation = orientation;
-		unit.ID = id;
+	public void AddTeam (Team team, short id, HexCell location, float orientation) {
+		teams.Add(team);
+		team.Grid = this;
+		team.Location = location;
+		team.Orientation = orientation;
+		team.ID = id;
+
+		float radius = 1.5f;
+		Team[] children = new Team[6];
+		for (int i = 0; i < children.Length; i++)
+		{
+			Team child = Instantiate(team);
+			float angle = Mathf.PI * 2 / children.Length * i;
+			child.transform.localPosition = new Vector3(Mathf.Sin(angle) * radius, 0, Mathf.Cos(angle) * radius);
+			children[i] = child;
+		}
+
+		for (int i = 0; i < children.Length; i++)
+		{
+			Team child = children[i];
+			child.transform.SetParent(team.transform, false);
+			child.transform.localScale = Vector3.one;
+			child.Orientation = 0;
+		}
 	}
 
-	public void RemoveTeam (Team unit) {
-		units.Remove(unit);
-		unit.Die();
+	public void RemoveTeam (Team team) {
+		teams.Remove(team);
+		team.Die();
 	}
 
 	public void MakeChildOfColumn (Transform child, int columnIndex) {
@@ -183,10 +201,10 @@ public class HexGrid : MonoBehaviour {
 	}
 
 	void ClearTeams () {
-		for (int i = 0; i < units.Count; i++) {
-			units[i].Die();
+		for (int i = 0; i < teams.Count; i++) {
+			teams[i].Die();
 		}
-		units.Clear();
+		teams.Clear();
 	}
 
 	void OnEnable () {
@@ -307,9 +325,9 @@ public class HexGrid : MonoBehaviour {
 			cells[i].Save(writer);
 		}
 
-		writer.Write(units.Count);
-		for (int i = 0; i < units.Count; i++) {
-			units[i].Save(writer);
+		writer.Write(teams.Count);
+		for (int i = 0; i < teams.Count; i++) {
+			teams[i].Save(writer);
 		}
 	}
 
@@ -339,8 +357,8 @@ public class HexGrid : MonoBehaviour {
 		}
 
 		if (header >= 2) {
-			int unitCount = reader.ReadInt32();
-			for (int i = 0; i < unitCount; i++) {
+			int teamCount = reader.ReadInt32();
+			for (int i = 0; i < teamCount; i++) {
 				Team.Load(reader, this);
 			}
 		}
@@ -502,8 +520,8 @@ public class HexGrid : MonoBehaviour {
 		for (int i = 0; i < cells.Length; i++) {
 			cells[i].ResetVisibility();
 		}
-		for (int i = 0; i < units.Count; i++) {
-			Team unit = units[i];
+		for (int i = 0; i < teams.Count; i++) {
+			Team unit = teams[i];
 			IncreaseVisibility(unit.Location, unit.VisionRange);
 		}
 	}

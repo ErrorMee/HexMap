@@ -230,8 +230,9 @@ public class Team : MonoBehaviour {
 		HexCoordinates coordinates = HexCoordinates.Load(reader);
 		short id = reader.ReadInt16();
 		float orientation = reader.ReadSingle();
+		Team team = Instantiate(unitPrefabs[id - 1]);
 		grid.AddTeam(
-			Instantiate(unitPrefabs[id - 1]), id, grid.GetCell(coordinates), orientation
+			team, id, grid.GetCell(coordinates), orientation
 		);
 	}
 
