@@ -11,14 +11,14 @@ public enum UnitType
 	BossSoldier
 }
 
-public class HexUnit : MonoBehaviour {
+public class Team : MonoBehaviour {
 
 	const float rotationSpeed = 720f;
 	const float travelSpeed = 1.5f;
 
 	private UnitAnimation unitAnimation;
 
-	public static HexUnit[] unitPrefabs;
+	public static Team[] unitPrefabs;
 
 	public short ID { get; set; }
 
@@ -33,10 +33,10 @@ public class HexUnit : MonoBehaviour {
 		set {
 			if (location) {
 				Grid.DecreaseVisibility(location, VisionRange);
-				location.Unit = null;
+				location.Team = null;
 			}
 			location = value;
-			value.Unit = this;
+			value.Team = this;
 			Grid.IncreaseVisibility(value, VisionRange);
 			transform.localPosition = value.Position;
 			Grid.MakeChildOfColumn(transform, value.ColumnIndex);
@@ -81,9 +81,9 @@ public class HexUnit : MonoBehaviour {
 	}
 
 	public void Travel (List<HexCell> path) {
-		location.Unit = null;
+		location.Team = null;
 		location = path[path.Count - 1];
-		location.Unit = this;
+		location.Team = this;
 		pathToTravel = path;
 		StopAllCoroutines();
 		StartCoroutine(TravelPath());
@@ -226,7 +226,7 @@ public class HexUnit : MonoBehaviour {
 		if (location) {
 			Grid.DecreaseVisibility(location, VisionRange);
 		}
-		location.Unit = null;
+		location.Team = null;
 		Destroy(gameObject);
 	}
 

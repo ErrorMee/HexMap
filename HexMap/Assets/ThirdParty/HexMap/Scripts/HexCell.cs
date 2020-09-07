@@ -259,7 +259,7 @@ public class HexCell : MonoBehaviour {
 		}
 	}
 
-	public HexUnit Unit { get; set; }
+	public Team Team { get; set; }
 
 	public HexCell PathFrom { get; set; }
 
@@ -485,16 +485,16 @@ public class HexCell : MonoBehaviour {
 					neighbor.chunk.Refresh();
 				}
 			}
-			if (Unit) {
-				Unit.ValidateLocation();
+			if (Team) {
+				Team.ValidateLocation();
 			}
 		}
 	}
 
 	void RefreshSelfOnly () {
 		chunk.Refresh();
-		if (Unit) {
-			Unit.ValidateLocation();
+		if (Team) {
+			Team.ValidateLocation();
 		}
 	}
 

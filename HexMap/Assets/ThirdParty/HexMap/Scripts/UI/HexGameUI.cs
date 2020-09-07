@@ -8,7 +8,7 @@ public class HexGameUI : MonoBehaviour {
 
 	HexCell currentCell;
 
-	public HexUnit selectedUnit;
+	public Team selectedUnit;
 
 	public void SetEditMode (bool toggle) {
 		enabled = !toggle;
@@ -70,7 +70,7 @@ public class HexGameUI : MonoBehaviour {
 		grid.ClearPath();
 		UpdateCurrentCell();
 		if (currentCell) {
-			selectedUnit = currentCell.Unit;
+			selectedUnit = currentCell.Team;
 			if (selectedUnit)
 			{
 				currentCell.EnableHighlight(Color.yellow);
@@ -83,7 +83,7 @@ public class HexGameUI : MonoBehaviour {
 			if (currentCell.highlightQuad && currentCell.highlightQuad.buildEnable)
 			{
 				if (currentCell && selectedUnit.IsValidDestination(currentCell) 
-					&& currentCell.Unit == null)
+					&& currentCell.Team == null)
 					//grid.CanMoveIn(currentCell))
 				{
 					grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);

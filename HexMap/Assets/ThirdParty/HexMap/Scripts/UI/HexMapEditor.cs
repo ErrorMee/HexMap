@@ -283,17 +283,17 @@ public class HexMapEditor : MonoBehaviour {
 			{
 				if (activeHeroTypeIndex == 0)
 				{
-					if (cell.Unit)
+					if (cell.Team)
 					{
-						hexGrid.RemoveUnit(cell.Unit);
+						hexGrid.RemoveUnit(cell.Team);
 					}
 				}
 				else
 				{
-					if (!cell.Unit)
+					if (!cell.Team)
 					{
 						hexGrid.AddUnit(
-							Instantiate(HexUnit.unitPrefabs[activeHeroTypeIndex - 1]), 
+							Instantiate(Team.unitPrefabs[activeHeroTypeIndex - 1]), 
 							(short)activeHeroTypeIndex, cell, Random.Range(0f, 360f)
 						);
 					}

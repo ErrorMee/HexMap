@@ -15,7 +15,7 @@ public class HexGrid : MonoBehaviour {
 
 	public HexCell cellPrefab;
 	public HexGridChunk chunkPrefab;
-	public HexUnit[] unitPrefabs;
+	public Team[] unitPrefabs;
 
 	public Texture2D noiseSource;
 
@@ -51,7 +51,7 @@ public class HexGrid : MonoBehaviour {
 
 	int currentCenterColumnIndex = -1;
 
-	List<HexUnit> units = new List<HexUnit>();
+	List<Team> units = new List<Team>();
 
 	HexCellShaderData cellShaderData;
 
@@ -61,7 +61,7 @@ public class HexGrid : MonoBehaviour {
 
 		HexMetrics.noiseSource = noiseSource;
 		HexMetrics.InitializeHashGrid(seed);
-		HexUnit.unitPrefabs = unitPrefabs;
+		Team.unitPrefabs = unitPrefabs;
 		cellShaderData = gameObject.AddComponent<HexCellShaderData>();
 		cellShaderData.Grid = this;
 		if (generateMaps)
@@ -74,7 +74,7 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 
-	public void AddUnit (HexUnit unit, short id, HexCell location, float orientation) {
+	public void AddUnit (Team unit, short id, HexCell location, float orientation) {
 		units.Add(unit);
 		unit.Grid = this;
 		unit.Location = location;
@@ -83,7 +83,7 @@ public class HexGrid : MonoBehaviour {
 		unit.Type = UnitType.Hero;
 	}
 
-	public void RemoveUnit (HexUnit unit) {
+	public void RemoveUnit (Team unit) {
 		units.Remove(unit);
 		unit.Die();
 	}
@@ -196,7 +196,7 @@ public class HexGrid : MonoBehaviour {
 		if (!HexMetrics.noiseSource) {
 			HexMetrics.noiseSource = noiseSource;
 			HexMetrics.InitializeHashGrid(seed);
-			HexUnit.unitPrefabs = unitPrefabs;
+			Team.unitPrefabs = unitPrefabs;
 			HexMetrics.wrapSize = wrapping ? cellChunkCountX : 0;
 			ResetVisibility();
 		}
@@ -344,7 +344,7 @@ public class HexGrid : MonoBehaviour {
 		if (header >= 2) {
 			int unitCount = reader.ReadInt32();
 			for (int i = 0; i < unitCount; i++) {
-				HexUnit.Load(reader, this);
+				Team.Load(reader, this);
 			}
 		}
 
@@ -395,7 +395,7 @@ public class HexGrid : MonoBehaviour {
 
 	public bool CanMoveIn(HexCell moveInCell)
 	{
-		if (moveInCell.Unit == null)
+		if (moveInCell.Team == null)
 		{
 			return true;
 		}
@@ -404,7 +404,7 @@ public class HexGrid : MonoBehaviour {
 			for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
 			{
 				HexCell toCell = moveInCell.GetNeighbor(d);
-                if(toCell != null && toCell.Unit == null && Search(moveInCell, toCell, moveInCell.Unit)) 
+                if(toCell != null && toCell.Team == null && Search(moveInCell, toCell, moveInCell.Team)) 
 				{
 					return true;
 				}
@@ -413,7 +413,7 @@ public class HexGrid : MonoBehaviour {
 		return false;
 	}
 
-	public void FindPath (HexCell fromCell, HexCell toCell, HexUnit unit) {
+	public void FindPath (HexCell fromCell, HexCell toCell, Team unit) {
 		ClearPath();
 		currentPathFrom = fromCell;
 		currentPathTo = toCell;
@@ -421,7 +421,7 @@ public class HexGrid : MonoBehaviour {
 		ShowPath(unit.Speed);
 	}
 
-	public bool Search (HexCell fromCell, HexCell toCell, HexUnit unit) {
+	public bool Search (HexCell fromCell, HexCell toCell, Team unit) {
 		int speed = unit.Speed;
 		searchFrontierPhase += 2;
 		if (searchFrontier == null) {
@@ -506,7 +506,7 @@ public class HexGrid : MonoBehaviour {
 			cells[i].ResetVisibility();
 		}
 		for (int i = 0; i < units.Count; i++) {
-			HexUnit unit = units[i];
+			Team unit = units[i];
 			IncreaseVisibility(unit.Location, unit.VisionRange);
 		}
 	}
