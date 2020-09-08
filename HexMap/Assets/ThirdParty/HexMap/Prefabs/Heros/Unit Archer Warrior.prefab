@@ -1630,7 +1630,7 @@ GameObject:
   - component: {fileID: 3102963252683351897}
   - component: {fileID: 3102963252693068749}
   - component: {fileID: 3102963252683848570}
-  - component: {fileID: -5471583824754946750}
+  - component: {fileID: 9030835678806667856}
   m_Layer: 0
   m_Name: Unit Archer Warrior
   m_TagString: Untagged
@@ -1687,7 +1687,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 3102963252693068749}
   warrior: 6
---- !u!114 &-5471583824754946750
+--- !u!114 &9030835678806667856
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1696,7 +1696,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3102963252683848569}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 434bba114c5e84a0f8fb19ef55b2766a, type: 3}
+  m_Script: {fileID: 11500000, guid: 21ecd37c35390db44b1529f828132e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3102963252683855273

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3037392496453353472}
   - component: {fileID: 3037392496446295188}
   - component: {fileID: 3037392496453590049}
-  - component: {fileID: -9171832037544477499}
+  - component: {fileID: -7159167806175108326}
   m_Layer: 0
   m_Name: Unit Mage Warrior
   m_TagString: Player
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 3037392496446295188}
   warrior: 5
---- !u!114 &-9171832037544477499
+--- !u!114 &-7159167806175108326
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,7 +78,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3037392496453590048}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 434bba114c5e84a0f8fb19ef55b2766a, type: 3}
+  m_Script: {fileID: 11500000, guid: 21ecd37c35390db44b1529f828132e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3037392496453613134

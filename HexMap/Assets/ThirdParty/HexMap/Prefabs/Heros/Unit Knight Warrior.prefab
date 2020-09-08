@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7787350290972444603}
   - component: {fileID: 7787350290963286831}
-  - component: {fileID: -4675659419395955907}
   - component: {fileID: -6240293623569135249}
   - component: {fileID: -2208532828802965037}
+  - component: {fileID: -218803372651159078}
   m_Layer: 0
   m_Name: Unit Knight Warrior
   m_TagString: Player
@@ -57,18 +57,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &-4675659419395955907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7787350290972613531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 434bba114c5e84a0f8fb19ef55b2766a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-6240293623569135249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,6 +81,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 434bba114c5e84a0f8fb19ef55b2766a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  children: []
+--- !u!114 &-218803372651159078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7787350290972613531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21ecd37c35390db44b1529f828132e31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7787350290972695915

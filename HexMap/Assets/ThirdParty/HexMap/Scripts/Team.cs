@@ -5,12 +5,11 @@ using System.IO;
 
 public class Team : MonoBehaviour {
 
-	const float rotationSpeed = 720f;
-	const float travelSpeed = 1.5f;
+	const float travelSpeed = 2.0f;
 
-	private UnitAnimation unitAnimation;
+	public static Teamer[] teamerPrefabs;
 
-	public static Team[] unitPrefabs;
+	public List<Teamer> children = new List<Teamer>();
 
 	public short ID { get; set; }
 
@@ -35,16 +34,6 @@ public class Team : MonoBehaviour {
 
 	HexCell location, currentTravelLocation;
 
-	public float Orientation {
-		get {
-			return orientation;
-		}
-		set {
-			orientation = value;
-			transform.localRotation = Quaternion.Euler(0f, value, 0f);
-		}
-	}
-
 	public int Speed {
 		get {
 			return 8;
@@ -56,8 +45,6 @@ public class Team : MonoBehaviour {
 			return 10;
 		}
 	}
-
-	float orientation;
 
 	List<HexCell> pathToTravel;
 
@@ -81,7 +68,13 @@ public class Team : MonoBehaviour {
 
 	IEnumerator TravelPath () {
 		Vector3 a, b, c = pathToTravel[0].Position;
-		yield return LookAt(pathToTravel[1].Position);
+
+		for (int i = 0; i < children.Count - 1; i++)
+		{
+			StartCoroutine(children[i].LookAt(pathToTravel[1].Position));
+		}
+		yield return children[children.Count - 1].LookAt(pathToTravel[1].Position);
+
 		if (!currentTravelLocation) {
 			currentTravelLocation = pathToTravel[0];
 		}
@@ -115,7 +108,11 @@ public class Team : MonoBehaviour {
 				transform.localPosition = Bezier.GetPoint(a, b, c, t);
 				Vector3 d = Bezier.GetDerivative(a, b, c, t);
 				d.y = 0f;
-				transform.localRotation = Quaternion.LookRotation(d);
+				for (int j = 0; j < children.Count; j++)
+				{
+					children[j].transform.localRotation = Quaternion.LookRotation(d);
+				}
+				
 				yield return null;
 			}
 			Grid.DecreaseVisibility(pathToTravel[i], VisionRange);
@@ -132,59 +129,32 @@ public class Team : MonoBehaviour {
 			transform.localPosition = Bezier.GetPoint(a, b, c, t);
 			Vector3 d = Bezier.GetDerivative(a, b, c, t);
 			d.y = 0f;
-			transform.localRotation = Quaternion.LookRotation(d);
+			for (int j = 0; j < children.Count; j++)
+			{
+				children[j].transform.localRotation = Quaternion.LookRotation(d);
+			}
 			yield return null;
 
-			if (t > 0.6f && unitAnimation)
+			if (t > 0.6f)
 			{
-				unitAnimation.Move(false);
+				for (int i = 0; i < children.Count; i++)
+				{
+					children[i].Idle();
+				}
 			}
 		}
 		HexCell cell =
 			Grid.GetCell(transform.position);
 		cell.DisableHighlight();
 		transform.localPosition = location.Position;
-		orientation = transform.localRotation.eulerAngles.y;
+
+		for (int i = 0; i < children.Count; i++)
+		{
+			children[i].Orientation = children[i].transform.localRotation.eulerAngles.y;
+		}
+
 		ListPool<HexCell>.Add(pathToTravel);
 		pathToTravel = null;
-	}
-
-	IEnumerator LookAt (Vector3 point) {
-
-		if (HexMetrics.Wrapping) {
-			float xDistance = point.x - transform.localPosition.x;
-			if (xDistance < -HexMetrics.innerRadius * HexMetrics.wrapSize) {
-				point.x += HexMetrics.innerDiameter * HexMetrics.wrapSize;
-			}
-			else if (xDistance > HexMetrics.innerRadius * HexMetrics.wrapSize) {
-				point.x -= HexMetrics.innerDiameter * HexMetrics.wrapSize;
-			}
-		}
-
-		point.y = transform.localPosition.y;
-		Quaternion fromRotation = transform.localRotation;
-		Quaternion toRotation =
-			Quaternion.LookRotation(point - transform.localPosition);
-		float angle = Quaternion.Angle(fromRotation, toRotation);
-
-		if (angle > 0f) {
-			float speed = rotationSpeed / angle;
-			for (
-				float t = Time.deltaTime * speed;
-				t < 1f;
-				t += Time.deltaTime * speed
-			) {
-				transform.localRotation =
-					Quaternion.Slerp(fromRotation, toRotation, t);
-				yield return null;
-			}
-		}
-		if (unitAnimation)
-		{
-			unitAnimation.Move(true);
-		}
-		transform.LookAt(point);
-		orientation = transform.localRotation.eulerAngles.y;
 	}
 
 	public int GetMoveCost (
@@ -223,22 +193,49 @@ public class Team : MonoBehaviour {
 	public void Save (BinaryWriter writer) {
 		location.coordinates.Save(writer);
 		writer.Write(ID);
-		writer.Write(orientation);
+		writer.Write(children[0].Orientation);
 	}
 
 	public static void Load (BinaryReader reader, HexGrid grid) {
 		HexCoordinates coordinates = HexCoordinates.Load(reader);
 		short id = reader.ReadInt16();
 		float orientation = reader.ReadSingle();
-		Team team = Instantiate(unitPrefabs[id - 1]);
-		grid.AddTeam(
-			team, id, grid.GetCell(coordinates), orientation
-		);
+		grid.AddTeam(id, grid.GetCell(coordinates), orientation);
+	}
+
+	public void InitTeamer(float orientation)
+	{
+		Teamer teamer = teamerPrefabs[ID - 1];
+
+		Teamer child = Instantiate(teamer, transform, false);
+		child.transform.localPosition = Vector3.zero;
+		child.transform.LookAt(new Vector3(121.2435f,0,0));
+		//child.Orientation = orientation;
+		children.Add(child);
+
+		float radius = 4.0f;
+		for (int i = 0; i < 6; i++)
+		{
+			child = Instantiate(teamer, transform, false);
+			float angle = Mathf.PI * 2 / 6 * i;
+			child.transform.localPosition = new Vector3(Mathf.Sin(angle) * radius, 0, Mathf.Cos(angle) * radius);
+			//child.Orientation = orientation;
+			child.transform.LookAt(new Vector3(121.2435f, 0, 0));
+			children.Add(child);
+		}
+
+		//radius = 5.5f;
+		//for (int i = 0; i < 6; i++)
+		//{
+		//	child = Instantiate(teamer, transform, false);
+		//	float angle = Mathf.PI * 2 / 6 * (i + 0.5f);
+		//	child.transform.localPosition = new Vector3(Mathf.Sin(angle) * radius, 0, Mathf.Cos(angle) * radius);
+		//	child.Orientation = orientation;
+		//	children.Add(child);
+		//}
 	}
 
 	void OnEnable () {
-
-		unitAnimation = GetComponent<UnitAnimation>();
 
 		if (location) {
 			transform.localPosition = location.Position;

@@ -8951,7 +8951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: {fileID: 1571186511}
-  selectedUnit: {fileID: 0}
+  selectedTeam: {fileID: 0}
 --- !u!1 &345848024
 GameObject:
   m_ObjectHideFlags: 0
@@ -21427,11 +21427,11 @@ MonoBehaviour:
   cellPrefab: {fileID: 11422220, guid: 94c2312396697489abc866a188f80152, type: 3}
   chunkPrefab: {fileID: 114000010052569294, guid: 7622d007cafd044a1b1189c0b93d2912,
     type: 3}
-  unitPrefabs:
-  - {fileID: -4675659419395955907, guid: f27068f38fe261f4fbd54db36dff124b, type: 3}
-  - {fileID: -5471583824754946750, guid: 1da518d57987a1e4a9b575f3fd97dc0c, type: 3}
-  - {fileID: 1917642614536077995, guid: fede17c539894404a8374124e026e145, type: 3}
-  - {fileID: -9171832037544477499, guid: 8e9ebf06ab3bcfb4da67e40abe1f4114, type: 3}
+  teamerPrefabs:
+  - {fileID: 9030835678806667856, guid: 1da518d57987a1e4a9b575f3fd97dc0c, type: 3}
+  - {fileID: -4183360732913358352, guid: fede17c539894404a8374124e026e145, type: 3}
+  - {fileID: -218803372651159078, guid: f27068f38fe261f4fbd54db36dff124b, type: 3}
+  - {fileID: -7159167806175108326, guid: 8e9ebf06ab3bcfb4da67e40abe1f4114, type: 3}
   noiseSource: {fileID: 2800000, guid: 38701cdeb1fb9427cbb585f917aa59cb, type: 3}
   seed: 12345
   hexMapCamera: {fileID: 2102140320}

@@ -13,7 +13,7 @@ public class HexGrid : MonoBehaviour {
 
 	public HexCell cellPrefab;
 	public HexGridChunk chunkPrefab;
-	public Team[] unitPrefabs;
+	public Teamer[] teamerPrefabs;
 
 	public Texture2D noiseSource;
 
@@ -59,7 +59,7 @@ public class HexGrid : MonoBehaviour {
 
 		HexMetrics.noiseSource = noiseSource;
 		HexMetrics.InitializeHashGrid(seed);
-		Team.unitPrefabs = unitPrefabs;
+		Team.teamerPrefabs = teamerPrefabs;
 		cellShaderData = gameObject.AddComponent<HexCellShaderData>();
 		cellShaderData.Grid = this;
 		if (generateMaps)
@@ -72,30 +72,13 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 
-	public void AddTeam (Team team, short id, HexCell location, float orientation) {
+	public void AddTeam (short id, HexCell location, float orientation) {
+		Team team = new GameObject("Team").AddComponent<Team>();
 		teams.Add(team);
 		team.Grid = this;
 		team.Location = location;
-		team.Orientation = orientation;
 		team.ID = id;
-
-		float radius = 1.5f;
-		Team[] children = new Team[6];
-		for (int i = 0; i < children.Length; i++)
-		{
-			Team child = Instantiate(team);
-			float angle = Mathf.PI * 2 / children.Length * i;
-			child.transform.localPosition = new Vector3(Mathf.Sin(angle) * radius, 0, Mathf.Cos(angle) * radius);
-			children[i] = child;
-		}
-
-		for (int i = 0; i < children.Length; i++)
-		{
-			Team child = children[i];
-			child.transform.SetParent(team.transform, false);
-			child.transform.localScale = Vector3.one;
-			child.Orientation = 0;
-		}
+		team.InitTeamer(orientation);
 	}
 
 	public void RemoveTeam (Team team) {
@@ -211,7 +194,7 @@ public class HexGrid : MonoBehaviour {
 		if (!HexMetrics.noiseSource) {
 			HexMetrics.noiseSource = noiseSource;
 			HexMetrics.InitializeHashGrid(seed);
-			Team.unitPrefabs = unitPrefabs;
+			Team.teamerPrefabs = teamerPrefabs;
 			HexMetrics.wrapSize = wrapping ? cellChunkCountX : 0;
 			ResetVisibility();
 		}

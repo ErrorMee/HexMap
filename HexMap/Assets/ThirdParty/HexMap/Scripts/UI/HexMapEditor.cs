@@ -292,10 +292,7 @@ public class HexMapEditor : MonoBehaviour {
 				{
 					if (!cell.Team)
 					{
-						hexGrid.AddTeam(
-							Instantiate(Team.unitPrefabs[activeHeroTypeIndex - 1]), 
-							(short)activeHeroTypeIndex, cell, Random.Range(0f, 360f)
-						);
+						hexGrid.AddTeam((short)activeHeroTypeIndex, cell, Random.Range(0f, 360f));
 					}
 				}
 				toggleHeroNone.isOn = true;
