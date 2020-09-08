@@ -214,10 +214,10 @@ public class Team : MonoBehaviour {
 		children.Add(child);
 
 		float radius = 4.0f;
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			child = Instantiate(teamer, transform, false);
-			float angle = Mathf.PI * 2 / 6 * i;
+			float angle = Mathf.PI * 2 / 5 * i;
 			child.transform.localPosition = new Vector3(Mathf.Sin(angle) * radius, 0, Mathf.Cos(angle) * radius);
 			//child.Orientation = orientation;
 			child.transform.LookAt(new Vector3(121.2435f, 0, 0));
