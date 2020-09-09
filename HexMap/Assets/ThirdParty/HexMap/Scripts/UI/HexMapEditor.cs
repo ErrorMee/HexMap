@@ -20,8 +20,9 @@ public class HexMapEditor : MonoBehaviour {
 	int activeElevation;
 	int activeWaterLevel;
 
-	int activeUrbanLevel, activeFarmLevel, activePlantLevel, activeSpecialIndex;
-
+	int activeUrbanLevel, activeFarmLevel;
+	int activeSpecialIndex = -1;
+	int activePlantLevel = -1;
 	int activeTerrainTypeIndex = -1;
 	int activeHeroTypeIndex = -1;
 
@@ -90,6 +91,11 @@ public class HexMapEditor : MonoBehaviour {
 
 	public void SetBrushSize (float size) {
 		brushSize = (int)size;
+	}
+
+	public void SetZoom(float size)
+	{
+		Camera.main.orthographicSize = size;
 	}
 
 	public void SetRiverMode (int mode) {
