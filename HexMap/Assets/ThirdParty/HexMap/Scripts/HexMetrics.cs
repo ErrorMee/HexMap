@@ -52,11 +52,11 @@ public static class HexMetrics {
 
 	public const float waterElevationOffset = -0.5f;
 
-	public const float wallHeight = 5f;
+	public const float wallHeight = 4.8f;
 
 	public const float wallYOffset = -1f;
 
-	public const float wallThickness = 0.75f;
+	public const float wallThickness = 1.1f;
 
 	public const float wallElevationOffset = verticalTerraceStepSize;
 
