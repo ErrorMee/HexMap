@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BehaviorDesigner.Runtime;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -14,6 +15,8 @@ public class HexGrid : MonoBehaviour {
 	public HexCell cellPrefab;
 	public HexGridChunk chunkPrefab;
 	public Teamer[] teamerPrefabs;
+
+	public ExternalBehavior externalTeamBehavior;
 
 	public Texture2D noiseSource;
 
@@ -60,6 +63,7 @@ public class HexGrid : MonoBehaviour {
 		HexMetrics.noiseSource = noiseSource;
 		HexMetrics.InitializeHashGrid(seed);
 		Team.teamerPrefabs = teamerPrefabs;
+		Team.externalTeamBehavior = externalTeamBehavior;
 		cellShaderData = gameObject.AddComponent<HexCellShaderData>();
 		cellShaderData.Grid = this;
 		if (generateMaps)
@@ -195,6 +199,7 @@ public class HexGrid : MonoBehaviour {
 			HexMetrics.noiseSource = noiseSource;
 			HexMetrics.InitializeHashGrid(seed);
 			Team.teamerPrefabs = teamerPrefabs;
+			Team.externalTeamBehavior = externalTeamBehavior;
 			HexMetrics.wrapSize = wrapping ? cellChunkCountX : 0;
 			ResetVisibility();
 		}

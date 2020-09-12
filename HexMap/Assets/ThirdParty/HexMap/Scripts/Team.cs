@@ -2,18 +2,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using BehaviorDesigner.Runtime;
 
 public class Team : MonoBehaviour {
 
 	const float travelSpeed = 2.0f;
 
 	public static Teamer[] teamerPrefabs;
+	public static ExternalBehavior externalTeamBehavior;
 
 	public List<Teamer> children = new List<Teamer>();
 
 	public short ID { get; set; }
 
 	public HexGrid Grid { get; set; }
+
+	private BehaviorTree behaviorTree;
 
 	public HexCell Location {
 		get {
@@ -67,6 +71,9 @@ public class Team : MonoBehaviour {
 	}
 
 	IEnumerator TravelPath () {
+
+		behaviorTree.SetVariableValue("state", TeamState.March);
+
 		Vector3 a, b, c = pathToTravel[0].Position;
 
 		for (int i = 0; i < children.Count - 1; i++)
@@ -84,6 +91,12 @@ public class Team : MonoBehaviour {
 		float t = Time.deltaTime * travelSpeed;
 		for (int i = 1; i < pathToTravel.Count; i++) {
 			currentTravelLocation = pathToTravel[i];
+
+			if (currentTravelLocation.Team != null && currentTravelLocation.Team != this)
+			{
+				currentTravelLocation.Team.behaviorTree.SetVariableValue("state", TeamState.Disperse);
+			}
+
 			a = c;
 			b = pathToTravel[i - 1].Position;
 
@@ -125,6 +138,8 @@ public class Team : MonoBehaviour {
 		b = location.Position;
 		c = b;
 		Grid.IncreaseVisibility(location, VisionRange);
+
+		bool running = true;
 		for (; t < 1f; t += Time.deltaTime * travelSpeed) {
 			transform.localPosition = Bezier.GetPoint(a, b, c, t);
 			Vector3 d = Bezier.GetDerivative(a, b, c, t);
@@ -135,8 +150,10 @@ public class Team : MonoBehaviour {
 			}
 			yield return null;
 
-			if (t > 0.6f)
+			if (running && t > 0.6f)
 			{
+				running = false;
+				behaviorTree.SetVariableValue("state", TeamState.Formation);
 				for (int i = 0; i < children.Count; i++)
 				{
 					children[i].Idle();
@@ -205,34 +222,27 @@ public class Team : MonoBehaviour {
 
 	public void InitTeamer(float orientation)
 	{
+		
 		Teamer teamer = teamerPrefabs[ID - 1];
 
 		Teamer child = Instantiate(teamer, transform, false);
-		child.transform.localPosition = Vector3.zero;
 		child.transform.LookAt(new Vector3(121.2435f,0,0));
-		//child.Orientation = orientation;
 		children.Add(child);
 
-		float radius = 4.0f;
 		for (int i = 0; i < 5; i++)
 		{
 			child = Instantiate(teamer, transform, false);
-			float angle = Mathf.PI * 2 / 5 * i;
-			child.transform.localPosition = new Vector3(Mathf.Sin(angle) * radius, 0, Mathf.Cos(angle) * radius);
-			//child.Orientation = orientation;
 			child.transform.LookAt(new Vector3(121.2435f, 0, 0));
 			children.Add(child);
 		}
 
-		//radius = 5.5f;
-		//for (int i = 0; i < 6; i++)
-		//{
-		//	child = Instantiate(teamer, transform, false);
-		//	float angle = Mathf.PI * 2 / 6 * (i + 0.5f);
-		//	child.transform.localPosition = new Vector3(Mathf.Sin(angle) * radius, 0, Mathf.Cos(angle) * radius);
-		//	child.Orientation = orientation;
-		//	children.Add(child);
-		//}
+		behaviorTree = gameObject.AddComponent<BehaviorTree>();
+		behaviorTree.StartWhenEnabled = false;
+		behaviorTree.RestartWhenComplete = true;
+		behaviorTree.ExternalBehavior = externalTeamBehavior;
+		behaviorTree.SetVariableValue("Teamers", children);
+		behaviorTree.SetVariableValue("state", TeamState.Formation);
+		behaviorTree.EnableBehavior();
 	}
 
 	void OnEnable () {
