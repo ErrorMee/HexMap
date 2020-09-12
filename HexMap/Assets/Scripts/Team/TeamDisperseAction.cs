@@ -17,9 +17,16 @@ public class TeamDisperseAction : Action
         quenceComplete = false;
 
         DG.Tweening.Sequence quence = DOTween.Sequence();
-        quence.AppendInterval(0.2f);
+        quence.AppendInterval(0.5f);
+        //quence.AppendCallback(() => {
+        //    for (int i = 0; i < children.Value.Count; i++)
+        //    {
+        //        Teamer child = children.Value[i];
+        //        child.Move();
+        //    }
+        //});
         DG.Tweening.Sequence parallel = DOTween.Sequence();
-        float radius = 6.5f;
+        float radius = 5.0f;
         for (int i = 0; i < children.Value.Count; i++)
         {
             Teamer child = children.Value[i];
@@ -30,7 +37,16 @@ public class TeamDisperseAction : Action
             child.transform.LookAt(new Vector3(121.2435f, 0, 0));
         }
         quence.Append(parallel);
-        quence.AppendInterval(0.5f).onComplete = () => {
+
+        //quence.AppendCallback(() => {
+        //    for (int i = 0; i < children.Value.Count; i++)
+        //    {
+        //        Teamer child = children.Value[i];
+        //        child.Idle();
+        //    }
+        //});
+
+        quence.AppendInterval(0.2f).onComplete = () => {
             quenceComplete = true;
         };
         teamState.SetValue(TeamState.Idel);

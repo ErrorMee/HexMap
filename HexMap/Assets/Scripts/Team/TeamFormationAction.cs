@@ -17,7 +17,7 @@ public class TeamFormationActor : Action
     {
         quenceComplete = false;
         DG.Tweening.Sequence quence = DOTween.Sequence();
-        float radius = 4.0f;
+        float radius = 4.5f;
         for (int i = 0; i < children.Value.Count; i++)
         {
             Teamer child = children.Value[i];

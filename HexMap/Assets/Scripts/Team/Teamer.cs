@@ -74,5 +74,10 @@ public class Teamer : MonoBehaviour
 	{
 		unitAnimation.Move(false);
 	}
+
+	public void Move()
+	{
+		unitAnimation.Move(true);
+	}
 		 
 }

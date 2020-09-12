@@ -52,7 +52,7 @@ public static class HexMetrics {
 
 	public const float waterElevationOffset = -0.5f;
 
-	public const float wallHeight = 4f;
+	public const float wallHeight = 5f;
 
 	public const float wallYOffset = -1f;
 
@@ -61,6 +61,13 @@ public static class HexMetrics {
 	public const float wallElevationOffset = verticalTerraceStepSize;
 
 	public const float wallTowerThreshold = 0.5f;
+
+	/// <summary>
+	/// 墙的门宽度 默认0.5
+	/// </summary>
+	public const float wallDoorWidth = 0.9f;
+	public const float wallDoorStartP = (1 - HexMetrics.wallDoorWidth) / 2;
+	public const float wallDoorEndP = 1- wallDoorStartP;
 
 	public const float bridgeDesignLength = 7f;
 
