@@ -34,7 +34,6 @@ public class TeamDisperseAction : Action
             parallel.Join(
                 child.transform.DOLocalMove(new Vector3(Mathf.Sin(angle) * radius, 0, Mathf.Cos(angle) * radius),
                 0.2f));
-            child.transform.LookAt(new Vector3(121.2435f, 0, 0));
         }
         quence.Append(parallel);
 

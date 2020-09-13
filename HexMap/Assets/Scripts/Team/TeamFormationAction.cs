@@ -27,7 +27,6 @@ public class TeamFormationActor : Action
                 0.2f)).onComplete = ()=> {
                     quenceComplete = true;
                 };
-            child.transform.LookAt(new Vector3(121.2435f, 0, 0));
         }
         teamState.SetValue(TeamState.Idel);
     }
