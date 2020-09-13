@@ -130,19 +130,19 @@
 			return c;
 		}
 
-		void InitializeFragmentNormal(Input IN, inout SurfaceOutputStandardSpecular i) {
-			
-			//if (IN.worldNormal.y < 0.5 && IN.worldPos.y < 1)
-			{
-				i.Normal.xy = tex2D(_NormalMap, IN.worldPos.xz / 30).wy * 2 - 1;
-				i.Normal.xy *= 1;
-				i.Normal.z = sqrt(1 - saturate(dot(i.Normal.xy, i.Normal.xy)));
+		//void InitializeFragmentNormal(Input IN, inout SurfaceOutputStandardSpecular i) {
+		//	
+		//	//if (IN.worldNormal.y < 0.5 && IN.worldPos.y < 1)
+		//	{
+		//		i.Normal.xy = tex2D(_NormalMap, IN.worldPos.xz / 30).wy * 2 - 1;
+		//		i.Normal.xy *= 1;
+		//		i.Normal.z = sqrt(1 - saturate(dot(i.Normal.xy, i.Normal.xy)));
 
-				i.Normal = UnpackScaleNormal(tex2D(_NormalMap, IN.worldPos.xz / 30), 1);
-				i.Normal = i.Normal.xzy;
-				i.Normal = normalize(i.Normal);
-			}
-		}
+		//		i.Normal = UnpackScaleNormal(tex2D(_NormalMap, IN.worldPos.xz / 30), 1);
+		//		i.Normal = i.Normal.xzy;
+		//		i.Normal = normalize(i.Normal);
+		//	}
+		//}
 
 		void surf (Input IN, inout SurfaceOutputStandardSpecular o) {
 			//InitializeFragmentNormal(IN, o);
