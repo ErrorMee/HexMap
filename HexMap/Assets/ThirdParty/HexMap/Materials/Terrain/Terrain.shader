@@ -3,7 +3,7 @@
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Terrain Texture Array", 2DArray) = "white" {}
 		_GridTex ("Grid Texture", 2D) = "white" {}
-		[NoScaleOffset] _NormalMap("Normals", 2D) = "bump" {}
+		//_NormalMap("Normals", 2D) = "bump" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Specular ("Specular", Color) = (0.2, 0.2, 0.2)
 		_BackgroundColor ("Background Color", Color) = (0,0,0)
@@ -35,7 +35,7 @@
 		UNITY_DECLARE_TEX2DARRAY(_MainTex);
 
 		sampler2D _GridTex;
-		sampler2D _NormalMap;
+		//sampler2D _NormalMap;
 		half _Glossiness;
 		fixed3 _Specular;
 		fixed4 _Color;
@@ -56,6 +56,7 @@
 			#if defined(SHOW_MAP_DATA)
 				float mapData;
 			#endif
+			//INTERNAL_DATA
 		};
 
 		void vert (inout appdata_full v, out Input data) {
@@ -129,20 +130,22 @@
 			return c;
 		}
 
-		//void InitializeFragmentNormal(Input IN, inout SurfaceOutputStandardSpecular i) {
-		//	/*i.Normal.xy = tex2D(_NormalMap, IN.worldPos.xz).wy * 2 - 1;
-		//	i.Normal.xy *= 1;
-		//	i.Normal.z = sqrt(1 - saturate(dot(i.Normal.xy, i.Normal.xy)));
+		void InitializeFragmentNormal(Input IN, inout SurfaceOutputStandardSpecular i) {
+			
+			//if (IN.worldNormal.y < 0.5 && IN.worldPos.y < 1)
+			{
+				i.Normal.xy = tex2D(_NormalMap, IN.worldPos.xz / 30).wy * 2 - 1;
+				i.Normal.xy *= 1;
+				i.Normal.z = sqrt(1 - saturate(dot(i.Normal.xy, i.Normal.xy)));
 
-		//	i.Normal = UnpackScaleNormal(tex2D(_NormalMap, IN.worldPos.xz), 1);
-		//	i.Normal = i.Normal.xzy;
-		//	i.Normal = normalize(i.Normal);*/
-		//	i.Normal = (1,0,0);
-		//}
+				i.Normal = UnpackScaleNormal(tex2D(_NormalMap, IN.worldPos.xz / 30), 1);
+				i.Normal = i.Normal.xzy;
+				i.Normal = normalize(i.Normal);
+			}
+		}
 
 		void surf (Input IN, inout SurfaceOutputStandardSpecular o) {
 			//InitializeFragmentNormal(IN, o);
-			//o.Normal = (1, 0, 0);
 			fixed4 c;
 			/*c = GetTerrainColor(IN, 0) +
 				GetTerrainColor(IN, 1) +
