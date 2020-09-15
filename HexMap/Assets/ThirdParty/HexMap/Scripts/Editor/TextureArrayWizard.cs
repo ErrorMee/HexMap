@@ -1,4 +1,7 @@
-﻿using UnityEditor;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 public class TextureArrayWizard : ScriptableWizard {
@@ -12,13 +15,49 @@ public class TextureArrayWizard : ScriptableWizard {
 		);
 	}
 
+	private void OnEnable()
+	{
+		OnUpdateSelect();
+	}
+
+	private void OnSelectionChange()
+	{
+		OnUpdateSelect();
+	}
+
+	private void OnUpdateSelect()
+	{
+		UnityEngine.Object[] selObjs = Selection.GetFiltered(typeof(Texture2D), SelectionMode.DeepAssets);
+
+		textures = new Texture2D[selObjs.Length];
+
+		List<UnityEngine.Object> selObjList = new List<UnityEngine.Object>();
+
+		for (int i = 0; i < selObjs.Length; i++)
+		{
+			selObjList.Add(selObjs[i]);
+		}
+		selObjList.Sort((obj1,obj2) =>
+		{
+			return obj1.name.CompareTo(obj2.name);
+		});
+
+		for (int i = 0; i < selObjList.Count; i++)
+		{
+			textures[i] = selObjList[i] as Texture2D;
+		}
+	}
+
 	void OnWizardCreate () {
 		if (textures.Length == 0) {
 			return;
 		}
+
+		string assetPath = AssetDatabase.GetAssetOrScenePath(textures[0]);
+		string dirPath = Path.GetDirectoryName(assetPath);
+
 		string path = EditorUtility.SaveFilePanelInProject(
-			"Save Texture Array", "Texture Array", "asset", "Save Texture Array"
-		);
+			"Save Texture Array", "Texture Array", "asset", "Save Texture Array", dirPath);
 		if (path.Length == 0) {
 			return;
 		}
