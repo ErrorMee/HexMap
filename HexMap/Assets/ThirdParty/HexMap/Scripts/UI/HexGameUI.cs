@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class HexGameUI : MonoBehaviour {
@@ -7,11 +8,10 @@ public class HexGameUI : MonoBehaviour {
 
 	HexCell currentCell;
 
-	HexUnit selectedUnit;
+	public Team selectedTeam;
 
 	public void SetEditMode (bool toggle) {
 		enabled = !toggle;
-		grid.ShowUI(!toggle);
 		grid.ClearPath();
 		if (toggle) {
 			Shader.EnableKeyword("HEX_MAP_EDIT_MODE");
@@ -23,17 +23,46 @@ public class HexGameUI : MonoBehaviour {
 
 	void Update () {
 		if (!EventSystem.current.IsPointerOverGameObject()) {
-			if (Input.GetMouseButtonDown(0)) {
-				DoSelection();
-			}
-			else if (selectedUnit) {
-				if (Input.GetMouseButtonDown(1)) {
-					DoMove();
+
+			if (selectedTeam)
+			{
+				if (Input.GetMouseButtonUp(0))
+				{
+					if (currentCell)
+					{
+						currentCell.DisableHighlight();
+					}
+					bool hasPath = DoPathfinding();
+					if (hasPath)
+					{
+						DoMove();
+					}
+					
+					if (selectedTeam)
+					{
+						selectedTeam = null;
+					}
 				}
-				else {
-					DoPathfinding();
+			}
+			else 
+			{
+				if (Input.GetMouseButtonUp(0))
+				{
+					DoSelection();
 				}
 			}
+
+			//if (Input.GetMouseButtonDown(0)) {
+			//	DoSelection();
+			//}
+			//else if (selectedUnit) {
+			//	if (Input.GetMouseButtonDown(1)) {
+			//		DoMove();
+			//	}
+			//	else {
+			//		DoPathfinding();
+			//	}
+			//}
 		}
 	}
 
@@ -41,26 +70,55 @@ public class HexGameUI : MonoBehaviour {
 		grid.ClearPath();
 		UpdateCurrentCell();
 		if (currentCell) {
-			selectedUnit = currentCell.Unit;
+			selectedTeam = currentCell.Team;
+			if (selectedTeam)
+			{
+				currentCell.EnableHighlight(Color.yellow);
+			}
 		}
 	}
 
-	void DoPathfinding () {
+	bool DoPathfinding () {
 		if (UpdateCurrentCell()) {
-			if (currentCell && selectedUnit.IsValidDestination(currentCell)) {
-				grid.FindPath(selectedUnit.Location, currentCell, selectedUnit);
-			}
-			else {
-				grid.ClearPath();
+			if (currentCell.highlightQuad && currentCell.highlightQuad.buildEnable)
+			{
+				if (currentCell && selectedTeam.IsValidDestination(currentCell) 
+					&& currentCell.Team == null)
+					//grid.CanMoveIn(currentCell))
+				{
+					grid.FindPath(selectedTeam.Location, currentCell, selectedTeam);
+					return true;
+				}
+				else
+				{
+					grid.ClearPath();
+				}
 			}
 		}
+		return false;
 	}
 
 	void DoMove () {
 		if (grid.HasPath) {
-			selectedUnit.Travel(grid.GetPath());
-			grid.ClearPath();
-		}
+			List<HexCell> pathCell = grid.GetPath();
+
+			//HexCell endCell = pathCell[pathCell.Count - 1];
+			//if (endCell.Unit != null)
+			//{
+			//	for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+			//	{
+			//		HexCell toCell = endCell.GetNeighbor(d);
+			//		if (toCell != null && toCell.Unit == null && grid.Search(endCell, toCell, endCell.Unit))
+			//		{
+			//			endCell.Unit.Travel(new List<HexCell>() { endCell, toCell });
+			//			break;
+			//		}
+			//	}
+			//}
+
+			selectedTeam.Travel(pathCell);
+            //grid.ClearPath();
+        }
 	}
 
 	bool UpdateCurrentCell () {

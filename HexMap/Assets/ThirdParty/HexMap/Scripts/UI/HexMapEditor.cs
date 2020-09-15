@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using System.IO;
+using UnityEngine.UI;
 
 public class HexMapEditor : MonoBehaviour {
 
@@ -12,11 +13,16 @@ public class HexMapEditor : MonoBehaviour {
 
 	public Transform leftPanel, rightPanel;
 
+	public Toggle toggleHeroNone;
+	public Toggle toggleHouseNone;
+	public Toggle togglePlantNone;
+
 	int activeElevation;
 	int activeWaterLevel;
 
-	int activeUrbanLevel, activeFarmLevel, activePlantLevel, activeSpecialIndex;
-
+	int activeUrbanLevel, activeFarmLevel;
+	int activeSpecialIndex = -1;
+	int activePlantLevel = -1;
 	int activeTerrainTypeIndex = -1;
 	int activeHeroTypeIndex = -1;
 
@@ -25,7 +31,7 @@ public class HexMapEditor : MonoBehaviour {
 	bool applyElevation = false;
 	bool applyWaterLevel = true;
 
-	bool applyUrbanLevel, applyFarmLevel, applyPlantLevel, applySpecialIndex;
+	bool applyUrbanLevel, applyFarmLevel;
 
 	enum OptionalToggle {
 		Ignore, Yes, No
@@ -75,16 +81,8 @@ public class HexMapEditor : MonoBehaviour {
 		activeFarmLevel = (int)level;
 	}
 
-	public void SetApplyPlantLevel (bool toggle) {
-		applyPlantLevel = toggle;
-	}
-
 	public void SetPlantLevel (float level) {
 		activePlantLevel = (int)level;
-	}
-
-	public void SetApplySpecialIndex (bool toggle) {
-		applySpecialIndex = toggle;
 	}
 
 	public void SetSpecialIndex (float index) {
@@ -93,6 +91,11 @@ public class HexMapEditor : MonoBehaviour {
 
 	public void SetBrushSize (float size) {
 		brushSize = (int)size;
+	}
+
+	public void SetZoom(float size)
+	{
+		Camera.main.orthographicSize = size;
 	}
 
 	public void SetRiverMode (int mode) {
@@ -230,7 +233,7 @@ public class HexMapEditor : MonoBehaviour {
 	}
 
 	void EditCell (HexCell cell) {
-		if (cell && cell.BuildEnable) {
+		if (cell && cell.highlightQuad && cell.highlightQuad.buildEnable) {
 			if (activeTerrainTypeIndex >= 0)
 			{
 				cell.TerrainTypeIndex = activeTerrainTypeIndex;
@@ -247,8 +250,9 @@ public class HexMapEditor : MonoBehaviour {
 			if (applyWaterLevel) {
 				cell.WaterLevel = activeWaterLevel;
 			}
-			if (applySpecialIndex) {
+			if (activeSpecialIndex > -1) {
 				cell.SpecialIndex = activeSpecialIndex;
+				toggleHouseNone.isOn = true;
 			}
 			if (applyUrbanLevel) {
 				cell.UrbanLevel = activeUrbanLevel;
@@ -256,8 +260,9 @@ public class HexMapEditor : MonoBehaviour {
 			if (applyFarmLevel) {
 				cell.FarmLevel = activeFarmLevel;
 			}
-			if (applyPlantLevel) {
+			if (activePlantLevel > -1) {
 				cell.PlantLevel = activePlantLevel;
+				togglePlantNone.isOn = true;
 			}
 			if (riverMode == OptionalToggle.No) {
 				cell.RemoveRiver();
@@ -280,24 +285,23 @@ public class HexMapEditor : MonoBehaviour {
 				}
 			}
 
-			if (activeHeroTypeIndex >= 0)
+			if (activeHeroTypeIndex >= 0 && cell.SpecialIndex == 0)
 			{
 				if (activeHeroTypeIndex == 0)
 				{
-					if (cell.Unit)
+					if (cell.Team)
 					{
-						hexGrid.RemoveUnit(cell.Unit);
+						hexGrid.RemoveTeam(cell.Team);
 					}
 				}
 				else
 				{
-					if (!cell.Unit)
+					if (!cell.Team)
 					{
-						hexGrid.AddUnit(
-							Instantiate(HexUnit.unitPrefabs[activeHeroTypeIndex - 1]), cell, Random.Range(0f, 360f)
-						);
+						hexGrid.AddTeam((short)activeHeroTypeIndex, cell, Random.Range(0f, 360f));
 					}
 				}
+				toggleHeroNone.isOn = true;
 			}
 		}
 	}

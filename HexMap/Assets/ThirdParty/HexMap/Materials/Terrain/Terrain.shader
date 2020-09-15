@@ -3,12 +3,16 @@
 		_Color ("Color", Color) = (1,1,1,1)
 		_MainTex ("Terrain Texture Array", 2DArray) = "white" {}
 		_GridTex ("Grid Texture", 2D) = "white" {}
+		//_NormalMap("Normals", 2D) = "bump" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Specular ("Specular", Color) = (0.2, 0.2, 0.2)
 		_BackgroundColor ("Background Color", Color) = (0,0,0)
 		_CliffColor("Cliff Color", Color) = (1, 0.95, 0.75, 1)
 		_RockColor("Rock Color", Color) = (1, 0.95, 0.75, 1)
+		_StepColor("Step Color", Color) = (1, 0.95, 0.75, 1)
+		_SandColor("Sand Color", Color) = (1, 0.95, 0.75, 1)
 		_ElevationStep("ElevationStep", Range(1,5)) = 2.1
+		_Focus("Focus", Vector) = (50, 50, 20, 60)
 		[Toggle(SHOW_MAP_DATA)]_ShowMapData ("Show Map Data", Float) = 0
 
 	}
@@ -31,14 +35,17 @@
 		UNITY_DECLARE_TEX2DARRAY(_MainTex);
 
 		sampler2D _GridTex;
-
+		//sampler2D _NormalMap;
 		half _Glossiness;
 		fixed3 _Specular;
 		fixed4 _Color;
 		half3 _BackgroundColor;
 		fixed4 _CliffColor;
 		fixed4 _RockColor;
+		fixed4 _StepColor;
+		fixed4 _SandColor;
 		half _ElevationStep;
+		fixed4 _Focus;
 
 		struct Input {
 			float4 color : COLOR;
@@ -49,6 +56,7 @@
 			#if defined(SHOW_MAP_DATA)
 				float mapData;
 			#endif
+			//INTERNAL_DATA
 		};
 
 		void vert (inout appdata_full v, out Input data) {
@@ -70,23 +78,24 @@
 				cell0.y * v.color.x + cell1.y * v.color.y + cell2.y * v.color.z;
 
 			data.worldNormal = UnityObjectToWorldNormal(v.normal);
-
+			
 			#if defined(SHOW_MAP_DATA)
 				data.mapData = cell0.z * v.color.x + cell1.z * v.color.y +
 					cell2.z * v.color.z;
 			#endif
+				
 		}
 
-		float4 GetTerrainColor (Input IN, int index) {
-			float3 uvw = float3(
+		fixed4 GetTerrainColor (Input IN, int index) {
+			fixed3 uvw = float3(
 				IN.worldPos.xz * (4 * TILING_SCALE),
 				IN.terrain[index]
 			);
-			float4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, uvw);
+			fixed4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, uvw);
 			return c * (IN.color[index] * IN.visibility[index]);
 		}
 
-		float4 GetRockColor(Input IN)
+		fixed4 GetRockColor(Input IN)
 		{
 			float tilingScale = 4 * TILING_SCALE;
 
@@ -95,10 +104,21 @@
 			float rawIndex = height / _ElevationStep + _ElevationStep / 3;
 			int index = (rawIndex);
 
-			float4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, float3(
+			fixed4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, float3(
 				IN.worldPos.xz * tilingScale,
 				index));
 			
+			float blockHeight = height % _ElevationStep;
+			float isStep = step(0.85, IN.worldNormal.y) * 
+				step(_ElevationStep * 0.25, blockHeight) * step(blockHeight, _ElevationStep * 0.75);
+			c = lerp(c, _StepColor, isStep * 0.5);
+
+			float centerDis = length(IN.worldPos.xz - _Focus.xy);
+
+			float glow = smoothstep(0, 1, (centerDis - _Focus.z) / _Focus.w);
+
+			c = lerp(c, _SandColor, glow);
+
 			/*float4 cNext = UNITY_SAMPLE_TEX2DARRAY(_MainTex, float3(
 				IN.worldPos.xz * tilingScale,
 				index + 1));
@@ -110,8 +130,22 @@
 			return c;
 		}
 
+		//void InitializeFragmentNormal(Input IN, inout SurfaceOutputStandardSpecular i) {
+		//	
+		//	//if (IN.worldNormal.y < 0.5 && IN.worldPos.y < 1)
+		//	{
+		//		i.Normal.xy = tex2D(_NormalMap, IN.worldPos.xz / 30).wy * 2 - 1;
+		//		i.Normal.xy *= 1;
+		//		i.Normal.z = sqrt(1 - saturate(dot(i.Normal.xy, i.Normal.xy)));
+
+		//		i.Normal = UnpackScaleNormal(tex2D(_NormalMap, IN.worldPos.xz / 30), 1);
+		//		i.Normal = i.Normal.xzy;
+		//		i.Normal = normalize(i.Normal);
+		//	}
+		//}
+
 		void surf (Input IN, inout SurfaceOutputStandardSpecular o) {
-			
+			//InitializeFragmentNormal(IN, o);
 			fixed4 c;
 			/*c = GetTerrainColor(IN, 0) +
 				GetTerrainColor(IN, 1) +
@@ -126,7 +160,7 @@
 			float h = IN.worldPos.y % 2 + sin(IN.worldPos.x * 4) / 5;
 			c.rgb = lerp(c.rgb, step(h, 1) * _RockColor.rgb + step(1, h) * _CliffColor.rgb, 
 				(step(h, 1) * _RockColor.a + step(1, h) * _CliffColor.a) * step(IN.worldNormal.y, 0.85));
-			
+
 			fixed4 grid = 1;
 			#if defined(GRID_ON)
 				float2 gridUV = IN.worldPos.xz;

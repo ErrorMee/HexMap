@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.IO;
-using System.Collections;
+﻿using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
+using System.IO;
+using UnityEngine;
 
 public class HexGrid : MonoBehaviour {
 
@@ -14,9 +13,10 @@ public class HexGrid : MonoBehaviour {
 	public bool wrapping;
 
 	public HexCell cellPrefab;
-	public Text cellLabelPrefab;
 	public HexGridChunk chunkPrefab;
-	public HexUnit[] unitPrefabs;
+	public Teamer[] teamerPrefabs;
+
+	public ExternalBehavior externalTeamBehavior;
 
 	public Texture2D noiseSource;
 
@@ -47,12 +47,12 @@ public class HexGrid : MonoBehaviour {
 
 	int searchFrontierPhase;
 
-	HexCell currentPathFrom, currentPathTo;
+	public HexCell currentPathFrom, currentPathTo;
 	bool currentPathExists;
 
 	int currentCenterColumnIndex = -1;
 
-	List<HexUnit> units = new List<HexUnit>();
+	List<Team> teams = new List<Team>();
 
 	HexCellShaderData cellShaderData;
 
@@ -62,7 +62,8 @@ public class HexGrid : MonoBehaviour {
 
 		HexMetrics.noiseSource = noiseSource;
 		HexMetrics.InitializeHashGrid(seed);
-		HexUnit.unitPrefabs = unitPrefabs;
+		Team.teamerPrefabs = teamerPrefabs;
+		Team.externalTeamBehavior = externalTeamBehavior;
 		cellShaderData = gameObject.AddComponent<HexCellShaderData>();
 		cellShaderData.Grid = this;
 		if (generateMaps)
@@ -75,16 +76,18 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 
-	public void AddUnit (HexUnit unit, HexCell location, float orientation) {
-		units.Add(unit);
-		unit.Grid = this;
-		unit.Location = location;
-		unit.Orientation = orientation;
+	public void AddTeam (short id, HexCell location, float orientation) {
+		Team team = new GameObject("Team").AddComponent<Team>();
+		teams.Add(team);
+		team.Grid = this;
+		team.Location = location;
+		team.ID = id;
+		team.InitTeamer(orientation);
 	}
 
-	public void RemoveUnit (HexUnit unit) {
-		units.Remove(unit);
-		unit.Die();
+	public void RemoveTeam (Team team) {
+		teams.Remove(team);
+		team.Die();
 	}
 
 	public void MakeChildOfColumn (Transform child, int columnIndex) {
@@ -101,7 +104,7 @@ public class HexGrid : MonoBehaviour {
 		}
 
 		ClearPath();
-		ClearUnits();
+		ClearTeams();
 		if (columns != null) {
 			for (int i = 0; i < columns.Length; i++) {
 				Destroy(columns[i].gameObject);
@@ -140,7 +143,7 @@ public class HexGrid : MonoBehaviour {
 				HexCell cell = GetCell(new HexCoordinates(x, z));
 				if (cell != null)
 				{
-					cell.BuildEnable = true;
+					cell.chunk.highlights.InitBuild(cell);
 				}
 			}
 		}
@@ -151,7 +154,7 @@ public class HexGrid : MonoBehaviour {
 				HexCell cell = GetCell(new HexCoordinates(x, z));
 				if (cell != null)
 				{
-					cell.BuildEnable = true;
+					cell.chunk.highlights.InitBuild(cell);
 				}
 			}
 		}
@@ -184,18 +187,19 @@ public class HexGrid : MonoBehaviour {
 		}
 	}
 
-	void ClearUnits () {
-		for (int i = 0; i < units.Count; i++) {
-			units[i].Die();
+	void ClearTeams () {
+		for (int i = 0; i < teams.Count; i++) {
+			teams[i].Die();
 		}
-		units.Clear();
+		teams.Clear();
 	}
 
 	void OnEnable () {
 		if (!HexMetrics.noiseSource) {
 			HexMetrics.noiseSource = noiseSource;
 			HexMetrics.InitializeHashGrid(seed);
-			HexUnit.unitPrefabs = unitPrefabs;
+			Team.teamerPrefabs = teamerPrefabs;
+			Team.externalTeamBehavior = externalTeamBehavior;
 			HexMetrics.wrapSize = wrapping ? cellChunkCountX : 0;
 			ResetVisibility();
 		}
@@ -233,12 +237,6 @@ public class HexGrid : MonoBehaviour {
 
 	public HexCell GetCell (int cellIndex) {
 		return cells[cellIndex];
-	}
-
-	public void ShowUI (bool visible) {
-		for (int i = 0; i < chunks.Length; i++) {
-			chunks[i].ShowUI(visible);
-		}
 	}
 
 	void CreateCell (int x, int z, int i) {
@@ -291,11 +289,6 @@ public class HexGrid : MonoBehaviour {
 			}
 		}
 
-		Text label = Instantiate<Text>(cellLabelPrefab);
-		label.rectTransform.anchoredPosition =
-			new Vector2(position.x, position.z);
-		cell.uiRect = label.rectTransform;
-
 		cell.Elevation = 0;
 
 		AddCellToChunk(x, z, cell);
@@ -320,15 +313,15 @@ public class HexGrid : MonoBehaviour {
 			cells[i].Save(writer);
 		}
 
-		writer.Write(units.Count);
-		for (int i = 0; i < units.Count; i++) {
-			units[i].Save(writer);
+		writer.Write(teams.Count);
+		for (int i = 0; i < teams.Count; i++) {
+			teams[i].Save(writer);
 		}
 	}
 
 	public void Load (BinaryReader reader, int header) {
 		ClearPath();
-		ClearUnits();
+		ClearTeams();
 		int x = 20, z = 15;
 		if (header >= 1) {
 			x = reader.ReadInt32();
@@ -352,9 +345,9 @@ public class HexGrid : MonoBehaviour {
 		}
 
 		if (header >= 2) {
-			int unitCount = reader.ReadInt32();
-			for (int i = 0; i < unitCount; i++) {
-				HexUnit.Load(reader, this);
+			int teamCount = reader.ReadInt32();
+			for (int i = 0; i < teamCount; i++) {
+				Team.Load(reader, this);
 			}
 		}
 
@@ -378,7 +371,6 @@ public class HexGrid : MonoBehaviour {
 		if (currentPathExists) {
 			HexCell current = currentPathTo;
 			while (current != currentPathFrom) {
-				current.SetLabel(null);
 				current.DisableHighlight();
 				current = current.PathFrom;
 			}
@@ -397,16 +389,34 @@ public class HexGrid : MonoBehaviour {
 			HexCell current = currentPathTo;
 			while (current != currentPathFrom) {
 				int turn = (current.Distance - 1) / speed;
-				current.SetLabel(turn.ToString());
-				current.EnableHighlight(Color.white);
+				current.EnableHighlight(Color.green);
 				current = current.PathFrom;
 			}
 		}
-		currentPathFrom.EnableHighlight(Color.blue);
-		currentPathTo.EnableHighlight(Color.red);
+		currentPathTo.EnableHighlight(Color.green);
 	}
 
-	public void FindPath (HexCell fromCell, HexCell toCell, HexUnit unit) {
+	public bool CanMoveIn(HexCell moveInCell)
+	{
+		if (moveInCell.Team == null)
+		{
+			return true;
+		}
+		else {
+
+			for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+			{
+				HexCell toCell = moveInCell.GetNeighbor(d);
+                if(toCell != null && toCell.Team == null && Search(moveInCell, toCell, moveInCell.Team)) 
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public void FindPath (HexCell fromCell, HexCell toCell, Team unit) {
 		ClearPath();
 		currentPathFrom = fromCell;
 		currentPathTo = toCell;
@@ -414,7 +424,7 @@ public class HexGrid : MonoBehaviour {
 		ShowPath(unit.Speed);
 	}
 
-	bool Search (HexCell fromCell, HexCell toCell, HexUnit unit) {
+	public bool Search (HexCell fromCell, HexCell toCell, Team unit) {
 		int speed = unit.Speed;
 		searchFrontierPhase += 2;
 		if (searchFrontier == null) {
@@ -498,8 +508,8 @@ public class HexGrid : MonoBehaviour {
 		for (int i = 0; i < cells.Length; i++) {
 			cells[i].ResetVisibility();
 		}
-		for (int i = 0; i < units.Count; i++) {
-			HexUnit unit = units[i];
+		for (int i = 0; i < teams.Count; i++) {
+			Team unit = teams[i];
 			IncreaseVisibility(unit.Location, unit.VisionRange);
 		}
 	}

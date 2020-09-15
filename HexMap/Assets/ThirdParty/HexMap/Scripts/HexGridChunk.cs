@@ -11,15 +11,11 @@ public class HexGridChunk : MonoBehaviour {
 
 	HexCell[] cells;
 
-	Canvas gridCanvas;
-
 	static Color weights1 = new Color(1f, 0f, 0f);
 	static Color weights2 = new Color(0f, 1f, 0f);
 	static Color weights3 = new Color(0f, 0f, 1f);
 
 	void Awake () {
-		gridCanvas = GetComponentInChildren<Canvas>();
-
 		cells = new HexCell[HexMetrics.chunkSizeX * HexMetrics.chunkSizeZ];
 	}
 
@@ -27,15 +23,10 @@ public class HexGridChunk : MonoBehaviour {
 		cells[index] = cell;
 		cell.chunk = this;
 		cell.transform.SetParent(transform, false);
-		cell.uiRect.SetParent(gridCanvas.transform, false);
 	}
 
 	public void Refresh () {
 		enabled = true;
-	}
-
-	public void ShowUI (bool visible) {
-		gridCanvas.gameObject.SetActive(visible);
 	}
 
 	void LateUpdate () {

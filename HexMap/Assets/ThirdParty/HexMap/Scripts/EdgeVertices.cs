@@ -6,9 +6,9 @@ public struct EdgeVertices {
 
 	public EdgeVertices (Vector3 corner1, Vector3 corner2) {
 		v1 = corner1;
-		v2 = Vector3.Lerp(corner1, corner2, 0.25f);
+		v2 = Vector3.Lerp(corner1, corner2, HexMetrics.wallDoorStartP);
 		v3 = Vector3.Lerp(corner1, corner2, 0.5f);
-		v4 = Vector3.Lerp(corner1, corner2, 0.75f);
+		v4 = Vector3.Lerp(corner1, corner2, HexMetrics.wallDoorEndP);
 		v5 = corner2;
 	}
 

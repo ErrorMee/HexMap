@@ -11,7 +11,10 @@ public static class HexMetrics {
 
 	public const float innerDiameter = innerRadius * 2f;
 
-	public const float solidFactor = 0.81f;
+	/// <summary>
+	/// 非过渡区域
+	/// </summary>
+	public const float solidFactor = 0.84f;
 
 	public const float blendFactor = 1f - solidFactor;
 
@@ -19,9 +22,15 @@ public static class HexMetrics {
 
 	public const float waterBlendFactor = 1f - waterFactor;
 
+	/// <summary>
+	/// 单位高度
+	/// </summary>
 	public const float elevationStep = 2.1f;
 
-	public const int terracesPerSlope = 2;
+	/// <summary>
+	/// 台阶数量
+	/// </summary>
+	public const int terracesPerSlope = 1;
 
 	public const int terraceSteps = terracesPerSlope * 2 + 1;
 
@@ -29,27 +38,40 @@ public static class HexMetrics {
 
 	public const float verticalTerraceStepSize = 1f / (terracesPerSlope + 1);
 
-	public const float cellPerturbStrength = 1.5f;
+	/// <summary>
+	/// 位置扰乱
+	/// </summary>
+	public const float cellPerturbStrength = 0.4f;
 
-	public const float elevationPerturbStrength = 0.5f;
+	/// <summary>
+	/// 高度扰乱
+	/// </summary>
+	public const float elevationPerturbStrength = 0.2f;
 
 	public const float streamBedElevationOffset = -1.75f;
 
 	public const float waterElevationOffset = -0.5f;
 
-	public const float wallHeight = 4f;
+	public const float wallHeight = 4.8f;
 
 	public const float wallYOffset = -1f;
 
-	public const float wallThickness = 0.75f;
+	public const float wallThickness = 1.1f;
 
 	public const float wallElevationOffset = verticalTerraceStepSize;
 
 	public const float wallTowerThreshold = 0.5f;
 
+	/// <summary>
+	/// 墙的门宽度 默认0.5
+	/// </summary>
+	public const float wallDoorWidth = 0.9f;
+	public const float wallDoorStartP = (1 - HexMetrics.wallDoorWidth) / 2;
+	public const float wallDoorEndP = 1- wallDoorStartP;
+
 	public const float bridgeDesignLength = 7f;
 
-	public const float noiseScale = 0.001f;
+	public const float noiseScale = 0.01f;
 
 	public const int chunkSizeX = 3, chunkSizeZ = 3;
 
@@ -57,7 +79,7 @@ public static class HexMetrics {
 
 	public const float hashGridScale = 0.25f;
 
-	public const int editRadiu = 3;
+	public const int editRadiu = 4;
 
 	static HexHash[] hashGrid;
 
