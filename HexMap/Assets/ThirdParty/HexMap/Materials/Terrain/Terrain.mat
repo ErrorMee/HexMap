@@ -48,7 +48,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 18700000, guid: 6038b3909ecefcb4c90dd5daec312a65, type: 2}
+        m_Texture: {fileID: 18700000, guid: 30943b4e27eb37a4083cc01564b94616, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -65,6 +65,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _StepTex:
+        m_Texture: {fileID: 2800000, guid: 272d434299ddd45a9963d243eb268b88, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -85,12 +89,14 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BackgroundColor: {r: 0.40784314, g: 0.38039216, b: 0.35686275, a: 1}
-    - _CliffColor: {r: 0.078431375, g: 0.09803922, b: 0, a: 0.50980395}
+    - _CliffColor: {r: 0.17106517, g: 0.20754719, b: 0.03034888, a: 0.50980395}
+    - _CliffColorA: {r: 0.12156863, g: 0.16862746, b: 0.1254902, a: 0.4}
+    - _CliffColorB: {r: 0.1225525, g: 0.16981131, b: 0.12592813, a: 0.4509804}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Focus: {r: 129.9038, g: 135, b: 70, a: 50}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RockColor: {r: 0.078545615, g: 0.09803922, b: 0, a: 0.47058824}
+    - _RockColor: {r: 0.79999995, g: 1, b: 0, a: 0.47058824}
     - _SandColor: {r: 0.86436456, g: 0.9056604, b: 0.7817729, a: 1}
     - _Specular: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-    - _StepColor: {r: 0.63746, g: 0.7075472, b: 0.6525273, a: 1}
+    - _StepColor: {r: 1, g: 1, b: 1, a: 1}

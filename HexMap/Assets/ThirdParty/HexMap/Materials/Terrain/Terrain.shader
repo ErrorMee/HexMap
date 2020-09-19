@@ -1,14 +1,15 @@
 ﻿Shader "Custom/Terrain" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
-		_MainTex ("平地颜色", 2DArray) = "white" {}
+		_MainTex ("平地纹理", 2DArray) = "white" {}
 		_GridTex ("Grid Texture", 2D) = "white" {}
-		_ElevationTex("峭壁颜色", 2D) = "white" {}
+		//_ElevationTex("峭壁纹理", 2D) = "white" {}
+		_StepTex("台阶纹理", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Specular ("Specular", Color) = (0.2, 0.2, 0.2)
 		_BackgroundColor ("Background Color", Color) = (0,0,0)
-		_CliffColor("峭壁叠加1", Color) = (1, 0.95, 0.75, 1)
-		_RockColor("峭壁叠加2", Color) = (1, 0.95, 0.75, 1)
+		_CliffColorA("峭壁A", Color) = (1, 0.95, 0.75, 1)
+		_CliffColorB("峭壁B", Color) = (1, 0.95, 0.75, 1)
 		_StepColor("台阶颜色", Color) = (1, 0.95, 0.75, 1)
 		_SandColor("视距颜色", Color) = (1, 0.95, 0.75, 1)
 		_ElevationStep("ElevationStep", Range(1,5)) = 2.1
@@ -35,13 +36,14 @@
 		UNITY_DECLARE_TEX2DARRAY(_MainTex);
 
 		sampler2D _GridTex;
-		sampler2D _ElevationTex;
+		//sampler2D _ElevationTex;
+		sampler2D _StepTex;
 		half _Glossiness;
 		fixed3 _Specular;
 		fixed4 _Color;
 		half3 _BackgroundColor;
-		fixed4 _CliffColor;
-		fixed4 _RockColor;
+		fixed4 _CliffColorA;
+		fixed4 _CliffColorB;
 		fixed4 _StepColor;
 		fixed4 _SandColor;
 		half _ElevationStep;
@@ -89,31 +91,41 @@
 		{
 			float tilingScale = 6 * TILING_SCALE;
 
-			float height = IN.worldPos.y + step(IN.worldNormal.y, 0.85) * sin(length(IN.worldPos.xz) * 1.5) / 7;
+			float height = IN.worldPos.y + step(IN.worldNormal.y, 0.85) * sin(length(IN.worldPos.xyz) * 1) * cos(IN.worldPos.x * 1) / 7;
 
-			float rawIndex = height / _ElevationStep + _ElevationStep / 3;
+			float rawIndex = height / _ElevationStep + _ElevationStep * 0.45;
 			int index = (rawIndex);
 
 			fixed4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, float3(
 				IN.worldPos.xz * tilingScale,
 				index));
 			
-			if (IN.worldNormal.y < 0.85)
+			/*if (IN.worldNormal.y < 0.85)
 			{
-				c = tex2D(_ElevationTex, float2(length(IN.worldPos.xz), height) / (_ElevationStep * 7));
-				c.rgb = lerp(c.rgb, _CliffColor.rgb, _CliffColor.a);
-			}
+				c = tex2D(_ElevationTex, float2(length(IN.worldPos.xz), height + _ElevationStep * 0.22) / (_ElevationStep * 7));
+				c.rgb = lerp(c.rgb, _CliffColorA.rgb, _CliffColorA.a);
+			}*/
+
+			fixed4 stepCol = tex2D(_StepTex, IN.worldPos.xz * tilingScale * 4);
 
 			float blockHeight = height % _ElevationStep;
-			float isStep = step(0.85, IN.worldNormal.y) * 
-				step(_ElevationStep * 0.25, blockHeight) * step(blockHeight, _ElevationStep * 0.75);
-			c = lerp(c, _StepColor, isStep * 0.5);
+
+			//if (IN.worldNormal.y > 0.59)
+			{
+				//float isStep = step(_ElevationStep * 0.05, blockHeight) * step(blockHeight, _ElevationStep * 0.95);
+				float isStep = step(0.59, IN.worldNormal.y) * step(_ElevationStep * 0.05, blockHeight) * step(blockHeight, _ElevationStep * 0.95);
+				c.rgb = c.rgb * (1 - isStep) + stepCol.rgb * c.rgb * isStep;
+			}
 
 			float centerDis = length(IN.worldPos.xz - _Focus.xy);
 
 			float glow = smoothstep(0, 1, (centerDis - _Focus.z) / _Focus.w);
 
 			c = lerp(c, _SandColor, glow);
+
+			float h = height % _ElevationStep + sin(IN.worldPos.x * 4) * cos(IN.worldPos.z * 4) / 5;
+			c.rgb = lerp(c.rgb, step(h, 1) * _CliffColorB.rgb + step(1, h) * _CliffColorA.rgb,
+				(step(h, 1) * _CliffColorB.a + step(1, h) * _CliffColorA.a) * step(IN.worldNormal.y, 0.85));
 
 			return c;
 		}
@@ -122,10 +134,6 @@
 			fixed4 c;
 
 			c = GetRockColor(IN);
-
-			/*float h = IN.worldPos.y % 2 + sin(IN.worldPos.x * 4) / 5;
-			c.rgb = lerp(c.rgb, step(h, 1) * _RockColor.rgb + step(1, h) * _CliffColor.rgb, 
-				(step(h, 1) * _RockColor.a + step(1, h) * _CliffColor.a) * step(IN.worldNormal.y, 0.85));*/
 
 			fixed4 grid = 1;
 			#if defined(GRID_ON)
