@@ -106,15 +106,15 @@
 				c.rgb = lerp(c.rgb, _CliffColorA.rgb, _CliffColorA.a);
 			}*/
 
-			fixed4 stepCol = tex2D(_StepTex, IN.worldPos.xz * tilingScale * 4);
+			//fixed4 stepCol = tex2D(_StepTex, IN.worldPos.xz * tilingScale * 4);
 
-			float blockHeight = height % _ElevationStep;
+			//float blockHeight = height % _ElevationStep;
 
 			//if (IN.worldNormal.y > 0.59)
 			{
 				//float isStep = step(_ElevationStep * 0.05, blockHeight) * step(blockHeight, _ElevationStep * 0.95);
-				float isStep = step(0.59, IN.worldNormal.y) * step(_ElevationStep * 0.05, blockHeight) * step(blockHeight, _ElevationStep * 0.95);
-				c.rgb = c.rgb * (1 - isStep) + stepCol.rgb * c.rgb * isStep;
+				//float isStep = step(0.59, IN.worldNormal.y) * step(_ElevationStep * 0.05, blockHeight) * step(blockHeight, _ElevationStep * 0.95);
+				//c.rgb = c.rgb * (1 - isStep) + stepCol.rgb * c.rgb * isStep;
 			}
 
 			float centerDis = length(IN.worldPos.xz - _Focus.xy);
@@ -123,9 +123,9 @@
 
 			c = lerp(c, _SandColor, glow);
 
-			float h = height % _ElevationStep + sin(IN.worldPos.x * 4) * cos(IN.worldPos.z * 4) / 5;
+			float h = height % _ElevationStep + sin(IN.worldPos.x * 2) * cos(IN.worldPos.z * 2)/2;
 			c.rgb = lerp(c.rgb, step(h, 1) * _CliffColorB.rgb + step(1, h) * _CliffColorA.rgb,
-				(step(h, 1) * _CliffColorB.a + step(1, h) * _CliffColorA.a) * step(IN.worldNormal.y, 0.85));
+				(step(h, 1) * _CliffColorB.a + step(1, h) * _CliffColorA.a) * step(IN.worldNormal.y, 0.6));
 
 			return c;
 		}

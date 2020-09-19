@@ -32,6 +32,10 @@ public class HighlightQuadManager : MonoBehaviour
 
     private HighlightQuad CreateQuad(HexCell cell)
     {
+        if (cell.highlightQuad != null)
+        {
+            return cell.highlightQuad;
+        }
         HighlightQuad highlightQuad = Instantiate(prefabHighlightQuad);
 
         highlightQuad.UpdatePostion(cell.Position, 0);

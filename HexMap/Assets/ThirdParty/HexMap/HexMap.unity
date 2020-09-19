@@ -28343,9 +28343,9 @@ MonoBehaviour:
   hexGrid: {fileID: 1571186511}
   terrainMaterial: {fileID: 2100000, guid: 6a3f5c7892e4b478e9e745026e6fe9f7, type: 2}
   texture2DArrays:
-  - {fileID: 18700000, guid: 8334d79b71bea0c49b936402ba8b526b, type: 2}
-  - {fileID: 18700000, guid: 6a8c614572229f24ab5c9d258bf8dc21, type: 2}
-  - {fileID: 18700000, guid: 7daa9851526309146b12301c00de465f, type: 2}
+  - {fileID: 18700000, guid: e96d02507632d9f4396413fdd16523b6, type: 2}
+  - {fileID: 18700000, guid: 6038b3909ecefcb4c90dd5daec312a65, type: 2}
+  - {fileID: 18700000, guid: 30943b4e27eb37a4083cc01564b94616, type: 2}
   leftPanel: {fileID: 1801720476}
   rightPanel: {fileID: 1479395908}
   toggleHeroNone: {fileID: 2103893231}
