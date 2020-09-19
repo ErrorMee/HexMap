@@ -22,6 +22,7 @@ public class HighlightQuadManager : MonoBehaviour
     {
         HighlightQuad highlightQuad = CreateQuad(cell);
         highlightQuad.buildEnable = true;
+        highlightQuad.ClearColor();
     }
 
     public void InitPath(HexCell cell)

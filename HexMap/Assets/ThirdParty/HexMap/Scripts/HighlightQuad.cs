@@ -21,7 +21,7 @@ public class HighlightQuad : MonoBehaviour
 
     public void ClearColor()
     {
-        if (buildEnable && elevation == 0)
+        if (false && buildEnable && elevation == 0)
         {
             if (meshColors == null)
             {

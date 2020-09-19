@@ -1622,7 +1622,7 @@ MonoBehaviour:
     value: 0
   radius:
     overrideState: 1
-    value: 5.28
+    value: 2383.05
   quality:
     overrideState: 1
     value: 2
