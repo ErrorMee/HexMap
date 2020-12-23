@@ -1,19 +1,29 @@
 ﻿Shader "Custom/Terrain" {
 	Properties {
 		_Color ("Color", Color) = (1,1,1,1)
-		_MainTex ("平地纹理", 2DArray) = "white" {}
 		_GridTex ("Grid Texture", 2D) = "white" {}
-		//_ElevationTex("峭壁纹理", 2D) = "white" {}
-		_StepTex("台阶纹理", 2D) = "white" {}
 		_Glossiness ("Smoothness", Range(0,1)) = 0.5
 		_Specular ("Specular", Color) = (0.2, 0.2, 0.2)
 		_BackgroundColor ("Background Color", Color) = (0,0,0)
-		_CliffColorA("峭壁A", Color) = (1, 0.95, 0.75, 1)
-		_CliffColorB("峭壁B", Color) = (1, 0.95, 0.75, 1)
-		_StepColor("台阶颜色", Color) = (1, 0.95, 0.75, 1)
-		_SandColor("视距颜色", Color) = (1, 0.95, 0.75, 1)
-		_ElevationStep("ElevationStep", Range(1,5)) = 2.1
-		_Focus("Focus", Vector) = (50, 50, 20, 60)
+
+		_FocusColor("视距颜色", Color) = (1, 0.95, 0.75, 1)
+		_Focus("视距", Vector) = (50, 50, 20, 60)
+
+		_PlatColor("平台颜色", Color) = (1,1,1,1)
+		_FloorColor("地面颜色", Color) = (1,1,1,1)
+
+		_UnitHeight("岩层厚度", Range(0,4)) = 1
+		_HeightColor0("岩层0", Color) = (1,1,1,1)
+		_HeightColor1("岩层1", Color) = (1,1,1,1)
+		_HeightColor2("岩层2", Color) = (1,1,1,1)
+		_HeightColor3("岩层3", Color) = (1,1,1,1)
+		_HeightColor4("岩层4", Color) = (1,1,1,1)
+		_HeightColor5("岩层5", Color) = (1,1,1,1)
+		_HeightColor6("岩层6", Color) = (1,1,1,1)
+		_HeightColor7("岩层7", Color) = (1,1,1,1)
+
+		[NoScaleOffset] _BumpMap("法线图", 2D) = "bump" {}
+
 		[Toggle(SHOW_MAP_DATA)]_ShowMapData ("Show Map Data", Float) = 0
 
 	}
@@ -32,32 +42,42 @@
 
 		#include "../HexMetrics.cginc"
 		#include "../HexCellData.cginc"
-
-		UNITY_DECLARE_TEX2DARRAY(_MainTex);
+		//#include "MySplat.cginc"
 
 		sampler2D _GridTex;
-		//sampler2D _ElevationTex;
-		sampler2D _StepTex;
+		sampler2D _BumpMap;
+
 		half _Glossiness;
 		fixed3 _Specular;
 		fixed4 _Color;
 		half3 _BackgroundColor;
-		fixed4 _CliffColorA;
-		fixed4 _CliffColorB;
-		fixed4 _StepColor;
-		fixed4 _SandColor;
-		half _ElevationStep;
+
+		fixed4 _FocusColor;
 		fixed4 _Focus;
 
+		fixed4 _PlatColor;
+		fixed4 _FloorColor;
+		half _UnitHeight;
+		fixed4 _HeightColor0;
+		fixed4 _HeightColor1;
+		fixed4 _HeightColor2;
+		fixed4 _HeightColor3;
+		fixed4 _HeightColor4;
+		fixed4 _HeightColor5;
+		fixed4 _HeightColor6;
+		fixed4 _HeightColor7;
+
 		struct Input {
+			float2 uv_BumpMap;
 			float4 color : COLOR;
 			float3 worldPos;
 			float3 terrain;
 			float4 visibility;
-			fixed3 worldNormal : TEXCOORD0;
+			fixed3 worldNormal;
 			#if defined(SHOW_MAP_DATA)
 				float mapData;
 			#endif
+			INTERNAL_DATA
 		};
 
 		void vert (inout appdata_full v, out Input data) {
@@ -84,48 +104,112 @@
 				data.mapData = cell0.z * v.color.x + cell1.z * v.color.y +
 					cell2.z * v.color.z;
 			#endif
-				
+		}
+
+		fixed4 GetColorful(Input IN)
+		{
+			float height = IN.worldPos.y;
+			height += sin(length(IN.worldPos) * 1.5) * _UnitHeight * 0.1;
+			height += sin(IN.worldPos.x * 0.2) * 0.5;
+			height += cos(IN.worldPos.z * 0.2) * 2;
+
+			int level = ceil(height / _UnitHeight);//-2 -1 0 1 2
+			level = abs(level);//2 1 0 1 2
+			level = level % 8.0;
+
+			fixed4 intColor =
+				step(0, level) * step(level, 0) * _HeightColor0
+				+ step(1, level) * step(level, 1) * _HeightColor1
+				+ step(2, level) * step(level, 2) * _HeightColor2
+				+ step(3, level) * step(level, 3) * _HeightColor3
+				+ step(4, level) * step(level, 4) * _HeightColor4
+				+ step(5, level) * step(level, 5) * _HeightColor5
+				+ step(6, level) * step(level, 6) * _HeightColor6
+				+ step(7, level) * step(level, 7) * _HeightColor7;
+			//return intColor;
+			//1 0 1
+			float frac101 = abs(abs(frac(height / _UnitHeight)) - 0.5) * 2;
+			float fadeRang = 0.3;
+			float frac101P = clamp(frac101 - (1 - fadeRang), 0, 1);
+			float fade = frac101P / fadeRang;
+
+			return lerp(intColor, 0.75, fade);
+		}
+
+		float sdBox(in float2 test, in float3 box)
+		{
+			float2 d = abs(test - box.xy) - box.zz;
+			return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
+		}
+
+		float sdRoundedBox(in float2 test, in float2 b, in float4 r)
+		{
+			r.xy = (test.x > 0.0) ? r.xy : r.zw;
+			r.x = (test.y > 0.0) ? r.x : r.y;
+			float2 q = abs(test) - b + r.x;
+			return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r.x;
 		}
 
 		fixed4 GetRockColor(Input IN)
 		{
-			float tilingScale = 6 * TILING_SCALE;
-
-			float height = IN.worldPos.y + step(IN.worldNormal.y, 0.85) * sin(length(IN.worldPos.xyz) * 1) * cos(IN.worldPos.x * 1) / 7;
-
-			float rawIndex = height / _ElevationStep + _ElevationStep * 0.45;
-			int index = (rawIndex);
-
-			fixed4 c = UNITY_SAMPLE_TEX2DARRAY(_MainTex, float3(
-				IN.worldPos.xz * tilingScale,
-				index));
-			
-			/*if (IN.worldNormal.y < 0.85)
-			{
-				c = tex2D(_ElevationTex, float2(length(IN.worldPos.xz), height + _ElevationStep * 0.22) / (_ElevationStep * 7));
-				c.rgb = lerp(c.rgb, _CliffColorA.rgb, _CliffColorA.a);
-			}*/
-
-			//fixed4 stepCol = tex2D(_StepTex, IN.worldPos.xz * tilingScale * 4);
-
-			//float blockHeight = height % _ElevationStep;
-
-			//if (IN.worldNormal.y > 0.59)
-			{
-				//float isStep = step(_ElevationStep * 0.05, blockHeight) * step(blockHeight, _ElevationStep * 0.95);
-				//float isStep = step(0.59, IN.worldNormal.y) * step(_ElevationStep * 0.05, blockHeight) * step(blockHeight, _ElevationStep * 0.95);
-				//c.rgb = c.rgb * (1 - isStep) + stepCol.rgb * c.rgb * isStep;
-			}
-
 			float centerDis = length(IN.worldPos.xz - _Focus.xy);
+
+			fixed4 rockColor;
+			if (IN.worldNormal.y > 0.9)
+			{
+				if (IN.worldPos.y < 0.25)
+				{
+					float fdis = sin(centerDis * 0.5);
+					float brightness = 1 - step(fdis, 0) * 0.025;
+
+					rockColor = fixed4(_FloorColor.rgb * brightness, 1);
+				}
+				else
+				{
+					fixed4 colorful = GetColorful(IN);
+
+					float3 box = float3(floor(IN.worldPos.xz * 0.25) + 0.5, 0.5);
+
+					float sd = 1;// sdBox(IN.worldPos.xz * 0.25, box);
+
+					if (sd > 0)
+					{
+						rockColor = colorful;
+					}
+					else//内部小于等于零
+					{
+						float d2b = clamp(abs(sd) * 10, 0, 1);
+
+						rockColor = lerp(colorful, _PlatColor, d2b);
+					}
+
+					/*float3 field = float3(IN.worldPos.xz, 0.0) * _CoverSplatScale;
+					float t = clamp(_CoverSplatFalloff * (snoise(field) + _CoverSplatBili), 0.0, 1.0);
+					fixed4 splatColor = lerp(colorful, _CoverColor, t);*/
+
+					//float2 aPoint = float2(1, 0);
+					//float2 bPoint = -aPoint;
+
+					//float lenAB = length(aPoint - bPoint);
+					//float lenAC = length(aPoint - IN.worldPos.xz);
+					//float lenBC = length(bPoint - IN.worldPos.xz);
+
+					//float area = sqrt((lenBC + lenAC + lenAB) * (lenBC + lenAC - lenAB) * (lenBC + lenAB - lenAC) * (lenAC + lenAB - lenBC)) * 0.25;
+
+					//float slen = frac((area * 2) / lenAB * 0.5);
+					////float brightness = 1 - step(slen, 0.75) * 0.1;
+					//float artificial = step(slen, 0.7);
+					//rockColor = fixed4(colorful.rgb * (1 - artificial) + _FloorColor.rgb * artificial, 1);
+				}
+			}
+			else
+			{
+				rockColor = lerp(_FloorColor, GetColorful(IN), saturate(IN.worldPos.y * 0.5));
+			}
 
 			float glow = smoothstep(0, 1, (centerDis - _Focus.z) / _Focus.w);
 
-			c = lerp(c, _SandColor, glow);
-
-			float h = height % _ElevationStep + sin(IN.worldPos.x * 2) * cos(IN.worldPos.z * 2)/2;
-			c.rgb = lerp(c.rgb, step(h, 1) * _CliffColorB.rgb + step(1, h) * _CliffColorA.rgb,
-				(step(h, 1) * _CliffColorB.a + step(1, h) * _CliffColorA.a) * step(IN.worldNormal.y, 0.6));
+			fixed4 c = lerp(rockColor, _FocusColor, glow);
 
 			return c;
 		}
@@ -148,6 +232,8 @@
 			#if defined(SHOW_MAP_DATA)
 				o.Albedo = IN.mapData * grid;
 			#endif
+
+			//o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap));
 			o.Specular = _Specular * explored;
 			o.Smoothness = _Glossiness;
 			o.Occlusion = explored;
