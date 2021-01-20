@@ -30,7 +30,7 @@ public static class HexMetrics {
 	/// <summary>
 	/// 台阶数量
 	/// </summary>
-	public const int terracesPerSlope = 1;
+	public const int terracesPerSlope = 0;
 
 	public const int terraceSteps = terracesPerSlope * 2 + 1;
 

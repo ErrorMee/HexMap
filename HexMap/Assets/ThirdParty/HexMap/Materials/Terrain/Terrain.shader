@@ -71,7 +71,6 @@
 			float2 uv_BumpMap;
 			float4 color : COLOR;
 			float3 worldPos;
-			float3 terrain;
 			float4 visibility;
 			fixed3 worldNormal;
 			#if defined(SHOW_MAP_DATA)
@@ -86,10 +85,6 @@
 			float4 cell0 = GetCellData(v, 0);
 			float4 cell1 = GetCellData(v, 1);
 			float4 cell2 = GetCellData(v, 2);
-
-			data.terrain.x = cell0.w;
-			data.terrain.y = cell1.w;
-			data.terrain.z = cell2.w;
 
 			data.visibility.x = cell0.x;
 			data.visibility.y = cell1.x;
@@ -136,76 +131,51 @@
 			return lerp(intColor, 0.75, fade);
 		}
 
+		float sdCircle(in float2 test, in float3 circle)
+		{
+			float d = length(test - circle.xy) - circle.z;
+
+			return d;
+		}
+
 		float sdBox(in float2 test, in float3 box)
 		{
 			float2 d = abs(test - box.xy) - box.zz;
 			return length(max(d, 0.0)) + min(max(d.x, d.y), 0.0);
 		}
 
-		float sdRoundedBox(in float2 test, in float2 b, in float4 r)
-		{
-			r.xy = (test.x > 0.0) ? r.xy : r.zw;
-			r.x = (test.y > 0.0) ? r.x : r.y;
-			float2 q = abs(test) - b + r.x;
-			return min(max(q.x, q.y), 0.0) + length(max(q, 0.0)) - r.x;
+		float randHole(float2 co) {
+			return frac(sin(dot(co.xy, float2(12.9898, 78.233))) * 43758.5453);
 		}
 
 		fixed4 GetRockColor(Input IN)
 		{
 			float centerDis = length(IN.worldPos.xz - _Focus.xy);
-
+			fixed4 colorful = GetColorful(IN);
 			fixed4 rockColor;
-			if (IN.worldNormal.y > 0.9)
+
+			if (IN.worldNormal.y > 0.6)
 			{
-				if (IN.worldPos.y < 0.25)
-				{
-					float fdis = sin(centerDis * 0.5);
-					float brightness = 1 - step(fdis, 0) * 0.025;
-
-					rockColor = fixed4(_FloorColor.rgb * brightness, 1);
-				}
-				else
-				{
-					fixed4 colorful = GetColorful(IN);
-
-					float3 box = float3(floor(IN.worldPos.xz * 0.25) + 0.5, 0.5);
-
-					float sd = 1;// sdBox(IN.worldPos.xz * 0.25, box);
-
-					if (sd > 0)
-					{
-						rockColor = colorful;
-					}
-					else//内部小于等于零
-					{
-						float d2b = clamp(abs(sd) * 10, 0, 1);
-
-						rockColor = lerp(colorful, _PlatColor, d2b);
-					}
-
-					/*float3 field = float3(IN.worldPos.xz, 0.0) * _CoverSplatScale;
-					float t = clamp(_CoverSplatFalloff * (snoise(field) + _CoverSplatBili), 0.0, 1.0);
-					fixed4 splatColor = lerp(colorful, _CoverColor, t);*/
-
-					//float2 aPoint = float2(1, 0);
-					//float2 bPoint = -aPoint;
-
-					//float lenAB = length(aPoint - bPoint);
-					//float lenAC = length(aPoint - IN.worldPos.xz);
-					//float lenBC = length(bPoint - IN.worldPos.xz);
-
-					//float area = sqrt((lenBC + lenAC + lenAB) * (lenBC + lenAC - lenAB) * (lenBC + lenAB - lenAC) * (lenAC + lenAB - lenBC)) * 0.25;
-
-					//float slen = frac((area * 2) / lenAB * 0.5);
-					////float brightness = 1 - step(slen, 0.75) * 0.1;
-					//float artificial = step(slen, 0.7);
-					//rockColor = fixed4(colorful.rgb * (1 - artificial) + _FloorColor.rgb * artificial, 1);
-				}
+				float fdis = sin(centerDis * 0.6);
+				float brightness = 1 - step(fdis, 0) * 0.025;
+				
+				rockColor = lerp(colorful, _FloorColor, 0.95);
+				rockColor = fixed4(rockColor.rgb * brightness, 1);
 			}
 			else
 			{
-				rockColor = lerp(_FloorColor, GetColorful(IN), saturate(IN.worldPos.y * 0.5));
+				rockColor = lerp(_FloorColor, colorful, saturate(IN.worldPos.y * 0.5));
 			}
+
+			//hole
+			float2 idx = ceil(IN.worldPos.xz);
+			float holeRadius = randHole(idx);
+			float holeLen = length(IN.worldPos.xz - idx);
+			if (holeLen <= holeRadius)
+			{
+				rockColor = colorful;
+			}
+			//
 
 			float glow = smoothstep(0, 1, (centerDis - _Focus.z) / _Focus.w);
 
