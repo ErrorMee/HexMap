@@ -28,6 +28,28 @@ MonoBehaviour:
   kernelSize:
     overrideState: 1
     value: 0
+--- !u!114 &-5925156264873409295
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25e05130444a74344a7608991335273f, type: 3}
+  m_Name: ImageOutline
+  m_EditorClassIdentifier: 
+  active: 1
+  enabled:
+    overrideState: 1
+    value: 1
+  Threshold:
+    overrideState: 1
+    value: 1
+  EdgeColor:
+    overrideState: 1
+    value: {r: 0.5566038, g: 0.43320578, b: 0.43320578, a: 1}
 --- !u!114 &-4590227681978233121
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -68,7 +90,7 @@ MonoBehaviour:
     value: 1
   edgeWidth:
     overrideState: 1
-    value: 0.05
+    value: 1.4
   edgeColor:
     overrideState: 1
     value: {r: 0.2924528, g: 0.2924528, b: 0.2924528, a: 1}
@@ -156,6 +178,7 @@ MonoBehaviour:
   - {fileID: -4590227681978233121}
   - {fileID: -1432826695493892739}
   - {fileID: 8537600636258835522}
+  - {fileID: -5925156264873409295}
 --- !u!114 &4784508342836692608
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -221,7 +244,7 @@ MonoBehaviour:
     value: 1
   blend:
     overrideState: 1
-    value: 0
+    value: 1
 --- !u!114 &7180232354469919719
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -1622,10 +1645,10 @@ MonoBehaviour:
     value: 0
   radius:
     overrideState: 1
-    value: 2383.05
+    value: 1
   quality:
     overrideState: 1
-    value: 2
+    value: 4
 --- !u!114 &8917699615077235803
 MonoBehaviour:
   m_ObjectHideFlags: 3

@@ -148,6 +148,10 @@
 			return frac(sin(dot(co.xy, float2(12.9898, 78.233))) * 43758.5453);
 		}
 
+		float variation(float2 v1, float2 v2, float strength) {
+			return sin(dot(normalize(v1), normalize(v2)) * strength) / 100.0;
+		}
+
 		fixed4 GetRockColor(Input IN)
 		{
 			float centerDis = length(IN.worldPos.xz - _Focus.xy);
@@ -161,21 +165,41 @@
 				
 				rockColor = lerp(colorful, _FloorColor, 0.95);
 				rockColor = fixed4(rockColor.rgb * brightness, 1);
+
+				//hole
+				float holeDensity = 0.25;
+				float holeSize = 0.3;
+				float holeMinSize = holeSize * 0.5;
+
+				if (IN.worldPos.y < 0.25)
+				{
+					holeDensity = 0.1;
+					holeSize = 0.2;
+					holeMinSize = holeSize * 0.5;
+				}
+
+				float2 pos = IN.worldPos.xz * holeDensity;
+				float2 idx = ceil(pos);
+				idx = idx + randHole(idx) * (0.5 - holeSize);
+				float radius = abs(randHole(idx));
+				float holeRadius = radius * holeSize;
+
+				float2 diff = pos - idx + 0.5;
+				float len = length(diff);
+				len += variation(diff, normalize(IN.worldPos.xz) - 0.5, radius * 6);
+				float holeLen = len;
+
+				if (holeLen <= holeRadius && holeRadius > holeMinSize)
+				{
+					rockColor = _PlatColor;
+				}
+				//
+
 			}
 			else
 			{
 				rockColor = lerp(_FloorColor, colorful, saturate(IN.worldPos.y * 0.5));
 			}
-
-			//hole
-			float2 idx = ceil(IN.worldPos.xz);
-			float holeRadius = randHole(idx);
-			float holeLen = length(IN.worldPos.xz - idx);
-			if (holeLen <= holeRadius)
-			{
-				rockColor = colorful;
-			}
-			//
 
 			float glow = smoothstep(0, 1, (centerDis - _Focus.z) / _Focus.w);
 
