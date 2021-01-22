@@ -35,29 +35,31 @@
     float4 Frag(VaryingsDefault i) : SV_Target
     {
         float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord);
-        float4 orValue = GetPixelValue(i.texcoord);
-        float thickness = 1;
-        float2 offsets[8] = {
-                    float2(-thickness, -thickness),
-                    float2(-thickness, 0),
-                    float2(-thickness, thickness),
-                    float2(0, -thickness),
-                    float2(0, thickness),
-                    float2(thickness, -thickness),
-                    float2(thickness, 0),
-                    float2(thickness, thickness)
-        };
-        float4 sampledValue = float4(0, 0, 0, 0);
-
-        for (int j = 0; j < 8; j++) {
-            sampledValue += GetPixelValue(i.texcoord + offsets[j] * _MainTex_TexelSize.xy);
-        }
-        sampledValue /= 8;
-
         float2 center = i.texcoord.xy - float2(0.5, 0.5);
         float dis = length(center);
+        if (dis < 0.5)
+        {
+            float4 orValue = GetPixelValue(i.texcoord);
+            float thickness = 1;
+            float2 offsets[8] = {
+                        float2(-thickness, -thickness),
+                        float2(-thickness, 0),
+                        float2(-thickness, thickness),
+                        float2(0, -thickness),
+                        float2(0, thickness),
+                        float2(thickness, -thickness),
+                        float2(thickness, 0),
+                        float2(thickness, thickness)
+            };
+            float4 sampledValue = float4(0, 0, 0, 0);
 
-        return lerp(color, _EdgeColor, step(dis, 0.5) * step(_Threshold, length(orValue - sampledValue)));
+            for (int j = 0; j < 8; j++) {
+                sampledValue += GetPixelValue(i.texcoord + offsets[j] * _MainTex_TexelSize.xy);
+            }
+            sampledValue /= 8;
+            return lerp(color, _EdgeColor, step(_Threshold, length(orValue - sampledValue)));
+        }
+        return color;
     }
 
         ENDHLSL
