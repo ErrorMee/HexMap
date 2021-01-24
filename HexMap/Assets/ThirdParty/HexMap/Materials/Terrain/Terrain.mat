@@ -88,6 +88,7 @@ Material:
     - _Parallax: 0.02
     - _ShowMapData: 0
     - _SrcBlend: 1
+    - _Threshold: 0.015
     - _UVSec: 0
     - _UnitHeight: 1.4
     - _ZWrite: 1
@@ -111,8 +112,9 @@ Material:
     - _HeightColor5: {r: 0.9647059, g: 0.46666667, b: 0.007843138, a: 1}
     - _HeightColor6: {r: 0.9254902, g: 0.3372549, b: 0.13725491, a: 1}
     - _HeightColor7: {r: 0.46991813, g: 0.504094, b: 0.6037736, a: 1}
+    - _Outline: {r: 0.509434, g: 0.43494126, b: 0.43494126, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
-    - _PlatColor: {r: 0.5935334, g: 0.7924528, b: 0.5719117, a: 1}
+    - _PlatColor: {r: 0.46956214, g: 0.6415094, b: 0.45087218, a: 1}
     - _RockColor: {r: 0.79999995, g: 1, b: 0, a: 0.47058824}
     - _SandColor: {r: 0.86436456, g: 0.9056604, b: 0.7817729, a: 1}
     - _Specular: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}

@@ -49,8 +49,8 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2568416074427873232}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -92,6 +92,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ced0554cd50fa464da1ec37b2be9df40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Edges: 6
+  m_Edges: 4
   m_HeightLevel: 1
-  m_CoverHeight: 4
+  m_CoverHeight: 3

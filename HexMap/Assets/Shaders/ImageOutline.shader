@@ -29,7 +29,7 @@
         half3 normal;
         float depth;
         DecodeDepthNormal(tex2D(_CameraDepthNormalsTexture, uv), depth, normal);
-        return float4(normal, depth * 1000);
+        return float4(normal, depth * 500);
     }
 
     float4 Frag(VaryingsDefault i) : SV_Target
@@ -40,6 +40,7 @@
         if (dis < 0.5)
         {
             float4 orValue = GetPixelValue(i.texcoord);
+            //return float4(orValue.www / 500.0, 1);
             float thickness = 1;
             float2 offsets[8] = {
                         float2(-thickness, -thickness),

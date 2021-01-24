@@ -28,7 +28,7 @@ public class PrismMesh : MonoBehaviour
 	private float m_HeightLevel = 1f;
 
 	[SerializeField]
-	[Range(0, 4)]
+	[Range(0, 8)]
 	private float m_CoverHeight = 0.2f;
 
 	private Mesh mesh;

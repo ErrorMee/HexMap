@@ -22,6 +22,9 @@
 		_HeightColor6("岩层6", Color) = (1,1,1,1)
 		_HeightColor7("岩层7", Color) = (1,1,1,1)
 
+		_Threshold("Outline", Range(0,1)) = 0.5
+		_Outline("OutlineColor", Color) = (1,1,1,1)
+
 		[NoScaleOffset] _BumpMap("法线图", 2D) = "bump" {}
 
 		[Toggle(SHOW_MAP_DATA)]_ShowMapData ("Show Map Data", Float) = 0
@@ -66,6 +69,18 @@
 		fixed4 _HeightColor5;
 		fixed4 _HeightColor6;
 		fixed4 _HeightColor7;
+		float _Threshold;
+		fixed4 _Outline;
+
+		sampler2D _CameraDepthNormalsTexture;
+		float4 _CameraDepthNormalsTexture_TexelSize;
+
+		float GetScreenDepthValue(in float2 uv) {
+			half3 normal;
+			float depth;
+			DecodeDepthNormal(tex2D(_CameraDepthNormalsTexture, uv), depth, normal);
+			return depth * 2;
+		}
 
 		struct Input {
 			float2 uv_BumpMap;
@@ -73,10 +88,12 @@
 			float3 worldPos;
 			float4 visibility;
 			fixed3 worldNormal;
+			float4 screenPos;
 			#if defined(SHOW_MAP_DATA)
 				float mapData;
 			#endif
 			INTERNAL_DATA
+
 		};
 
 		void vert (inout appdata_full v, out Input data) {
@@ -94,7 +111,8 @@
 				cell0.y * v.color.x + cell1.y * v.color.y + cell2.y * v.color.z;
 
 			data.worldNormal = UnityObjectToWorldNormal(v.normal);
-			
+			data.screenPos = ComputeScreenPos(v.vertex);
+
 			#if defined(SHOW_MAP_DATA)
 				data.mapData = cell0.z * v.color.x + cell1.z * v.color.y +
 					cell2.z * v.color.z;
@@ -152,6 +170,35 @@
 			return sin(dot(normalize(v1), normalize(v2)) * strength) / 100.0;
 		}
 
+		float4 Outline(float4 color, float2 uv)
+		{
+			float2 center = uv - float2(0.5, 0.5);
+			float dis = length(center);
+			if (dis < 0.5)
+			{
+				float orValue = GetScreenDepthValue(uv);
+				float thickness = 1.5;
+				float2 offsets[8] = {
+							float2(-thickness, -thickness),
+							float2(-thickness, 0),
+							float2(-thickness, thickness),
+							float2(0, -thickness),
+							float2(0, thickness),
+							float2(thickness, -thickness),
+							float2(thickness, 0),
+							float2(thickness, thickness)
+				};
+				float sampledValue = 0;
+
+				for (int j = 0; j < 8; j++) {
+					sampledValue += GetScreenDepthValue(uv + offsets[j] * _CameraDepthNormalsTexture_TexelSize.xy);
+				}
+				sampledValue /= 8;
+				return lerp(color, _Outline, step(_Threshold, orValue - sampledValue));
+			}
+			return color;
+		}
+
 		fixed4 GetRockColor(Input IN)
 		{
 			float centerDis = length(IN.worldPos.xz - _Focus.xy);
@@ -194,12 +241,13 @@
 					rockColor = _PlatColor;
 				}
 				//
-
+				
 			}
 			else
 			{
 				rockColor = lerp(_FloorColor, colorful, saturate(IN.worldPos.y * 0.5));
 			}
+			//rockColor = Outline(rockColor, IN.screenPos);
 
 			float glow = smoothstep(0, 1, (centerDis - _Focus.z) / _Focus.w);
 
