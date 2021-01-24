@@ -214,16 +214,15 @@
 				rockColor = fixed4(rockColor.rgb * brightness, 1);
 
 				//hole
-				float holeDensity = 0.25;
+				float holeDensity = 0.35;
 				float holeSize = 0.3;
-				float holeMinSize = holeSize * 0.5;
-
+				
 				if (IN.worldPos.y < 0.25)
 				{
-					holeDensity = 0.1;
+					holeDensity = 0.15;
 					holeSize = 0.2;
-					holeMinSize = holeSize * 0.5;
 				}
+				float holeMinSize = holeSize * 0.5;
 
 				float2 pos = IN.worldPos.xz * holeDensity;
 				float2 idx = ceil(pos);
@@ -260,6 +259,7 @@
 			fixed4 c;
 
 			c = GetRockColor(IN);
+			c = lerp(c, _FocusColor, IN.worldPos.y / (_UnitHeight * 20));
 
 			fixed4 grid = 1;
 			#if defined(GRID_ON)
